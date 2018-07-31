@@ -1,3 +1,5 @@
+using Vostok.Commons.Primitives;
+
 namespace Vostok.Commons.Helpers.Conversions
 {
     public static class DataSizeConversionExtensions

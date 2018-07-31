@@ -29,23 +29,23 @@
     <Company>SKB Kontur</Company>
     <Product>Vostok</Product>
     <Copyright>Copyright (c) 2017-2018 SKB Kontur</Copyright>
-    <Title>TODO</Title>
-    <Description>TODO</Description>
+    <Title>Vostok common helpers library</Title>
+    <Description>Common helpers library for microservice toolkit http://vostok.tools/</Description>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageProjectUrl>TODO</PackageProjectUrl>
-    <PackageLicenseUrl>TODO</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/vostok/commons.helpers</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/vostok/commons.helpers/blob/master/LICENSE</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>vostok</PackageTags>
+    <PackageTags>vostok vostok.commons.helpers</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/vostok/devtools/master/assets/Vostok-icon.png</PackageIconUrl>
-    <RepositoryUrl>TODO</RepositoryUrl>
+    <RepositoryUrl>https://github.com/vostok/commons.helpers</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Vostok.Commons">
-      <HintPath>..\..\vostok.commons\Vostok.Commons\bin\Release\netstandard2.0\Vostok.Commons.dll</HintPath>
+    <Reference Include="Vostok.Commons.Primitives">
+      <HintPath>..\..\vostok.commons.primitives\Vostok.Commons.Primitives\bin\Release\netstandard2.0\Vostok.Commons.Primitives.dll</HintPath>
     </Reference>
   </ItemGroup>
 
