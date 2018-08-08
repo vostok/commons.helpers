@@ -2,7 +2,7 @@ using Vostok.Commons.Primitives;
 
 namespace Vostok.Commons.Helpers.Conversions
 {
-    public static class DataSizeConversionExtensions
+    internal static class DataSizeConversionExtensions
     {
         public static DataSize Bytes(this ushort value) =>
             DataSize.FromBytes(value);
