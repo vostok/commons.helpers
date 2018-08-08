@@ -1,12 +1,14 @@
+src:
+  build:
+    target: None
+    configuration: None
+
 notests *default:
   build:
     target: Vostok.Commons.Helpers.sln
     configuration: NoTests
     tool:
       name: dotnet
-
-  install:
-    - Vostok.Commons.Helpers/bin/Release/netstandard2.0/Vostok.Commons.Helpers.dll
 
   deps:
     - vostok.devtools
