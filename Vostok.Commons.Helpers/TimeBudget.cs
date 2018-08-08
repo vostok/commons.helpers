@@ -4,7 +4,7 @@ using Vostok.Commons.Helpers.Extensions;
 
 namespace Vostok.Commons.Helpers
 {
-    public class TimeBudget
+    internal class TimeBudget
     {
         public static readonly TimeBudget Infinite = new TimeBudget(TimeSpan.FromHours(1));
         public static readonly TimeBudget Expired = new TimeBudget(TimeSpan.Zero);
