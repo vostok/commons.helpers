@@ -2,7 +2,7 @@
 
 namespace Vostok.Commons.Helpers.Conversions
 {
-    public static class TimeConversionExtensions
+    internal static class TimeConversionExtensions
     {
         public static TimeSpan Ticks(this int value) =>
             TimeSpan.FromTicks(value);

@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
-    public static class TimeSpanExtensions
+    internal static class TimeSpanExtensions
     {
         public static TimeSpan Multiply(this TimeSpan ts, double multiplier) => 
             TimeSpan.FromTicks((long)(ts.Ticks * multiplier));
