@@ -21,14 +21,12 @@ namespace Vostok.Commons.Helpers
         public static TimeBudget StartNew(int budgetMs) =>
             new TimeBudget(TimeSpan.FromMilliseconds(budgetMs)).Start();
 
-        private readonly TimeSpan budget;
-        private readonly TimeSpan precision;
         private readonly Stopwatch watch;
 
         public TimeBudget(TimeSpan budget, TimeSpan precision)
         {
-            this.budget = budget;
-            this.precision = precision;
+            Budget = budget;
+            Precision = precision;
             watch = new Stopwatch();
         }
 
@@ -37,9 +35,9 @@ namespace Vostok.Commons.Helpers
         {
         }
 
-        public TimeSpan Budget => budget;
+        public TimeSpan Budget { get; }
 
-        public TimeSpan Precision => precision;
+        public TimeSpan Precision { get; }
 
         public TimeBudget Start()
         {
@@ -49,8 +47,8 @@ namespace Vostok.Commons.Helpers
 
         public TimeSpan Remaining()
         {
-            var remaining = budget - watch.Elapsed;
-            return remaining < precision
+            var remaining = Budget - watch.Elapsed;
+            return remaining < Precision
                 ? TimeSpan.Zero
                 : remaining;
         }
