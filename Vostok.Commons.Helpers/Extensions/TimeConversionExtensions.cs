@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vostok.Commons.Helpers.Conversions
+namespace Vostok.Commons.Helpers.Extensions
 {
     internal static class TimeConversionExtensions
     {

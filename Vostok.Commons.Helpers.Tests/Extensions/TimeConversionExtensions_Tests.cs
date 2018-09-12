@@ -1,9 +1,9 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
-using Vostok.Commons.Helpers.Conversions;
+using Vostok.Commons.Helpers.Extensions;
 
-namespace Vostok.Commons.Helpers.Tests.Conversions
+namespace Vostok.Commons.Helpers.Tests.Extensions
 {
     [TestFixture]
     public class TimeConversionExtensions_Tests

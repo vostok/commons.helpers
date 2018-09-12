@@ -1,9 +1,8 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
-using Vostok.Commons.Helpers.Extensions;
 
-namespace Vostok.Commons.Helpers.Tests.Extensions
+namespace Vostok.Commons.Helpers.Tests
 {
     [TestFixture]
     internal class UrlNormalizer_Tests
