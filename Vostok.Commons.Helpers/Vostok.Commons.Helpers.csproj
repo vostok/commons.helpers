@@ -8,15 +8,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <LangVersion>7.2</LangVersion>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
     <VersionPrefix>0.0.1</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PackageReleaseNotes>TODO</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -27,15 +23,8 @@
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/commons.helpers</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/commons.helpers/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>vostok vostok.commons.helpers</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/vostok/devtools/master/assets/Vostok-icon.png</PackageIconUrl>
+    <PackageTags>vostok vostok.commons</PackageTags>
     <RepositoryUrl>https://github.com/vostok/commons.helpers</RepositoryUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="Vostok.Commons.Primitives">
-      <HintPath>..\..\vostok.commons.primitives\Vostok.Commons.Primitives\bin\Release\netstandard2.0\Vostok.Commons.Primitives.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
 </Project>
