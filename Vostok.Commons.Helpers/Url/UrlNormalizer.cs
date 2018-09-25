@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Vostok.Commons.Helpers.Extensions;
 
-namespace Vostok.Commons.Helpers
+namespace Vostok.Commons.Helpers.Url
 {
     internal static class UrlNormalizer
     {

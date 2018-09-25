@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vostok.Commons.Helpers.Extensions
+namespace Vostok.Commons.Helpers.Url
 {
     internal static class UrlExtensions
     {
