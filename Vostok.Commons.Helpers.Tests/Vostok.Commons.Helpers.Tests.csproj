@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Vostok.Commons.Helpers\Vostok.Commons.Helpers.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>
