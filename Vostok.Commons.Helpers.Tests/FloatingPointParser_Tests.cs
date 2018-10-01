@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Vostok.Commons.Helpers.Tests
 {
     [TestFixture]
-    public class FloatingPointParser_Tests
+    public class NumericTypeParser_Tests
     {
         [TestCase("1.23", 1.23)]
         [TestCase("1,23", 1.23)]
@@ -14,7 +14,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase("5'12e-2", 5.12)]
         public void Should_parse_double_in_different_formats(string input, double expected)
         {
-            FloatingPointParser<double>.TryParse(input, out var result).Should().BeTrue();
+            NumericTypeParser<double>.TryParse(input, out var result).Should().BeTrue();
 
             result.Should().BeApproximately(expected, 0.0001);
         }
@@ -26,7 +26,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase("5'12e-2", 5.12)]
         public void Should_parse_decimal_in_different_formats(string input, double expected)
         {
-            FloatingPointParser<decimal>.TryParse(input, out var result).Should().BeTrue();
+            NumericTypeParser<decimal>.TryParse(input, out var result).Should().BeTrue();
 
             result.Should().BeApproximately((decimal)expected, 0.0001m);
         }
@@ -38,7 +38,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase("5'12e-2", 5.12f)]
         public void Should_parse_float_in_different_formats(string input, float expected)
         {
-            FloatingPointParser<float>.TryParse(input, out var result).Should().BeTrue();
+            NumericTypeParser<float>.TryParse(input, out var result).Should().BeTrue();
 
             result.Should().BeApproximately(expected, 0.0001f);
         }
@@ -46,7 +46,7 @@ namespace Vostok.Commons.Helpers.Tests
         [Test]
         public void TryParse_should_throw_exception_for_invalid_number_type()
         {
-            new Action(() => FloatingPointParser<object>.TryParse("123", out var _)).Should().Throw<NotSupportedException>();
+            new Action(() => NumericTypeParser<object>.TryParse("123", out var _)).Should().Throw<NotSupportedException>();
         }
 
         [TestCase("abc")]
@@ -54,13 +54,13 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase(null)]
         public void TryParse_should_return_false_for_invalid_input(string input)
         {
-            FloatingPointParser<double>.TryParse(input, out var _).Should().BeFalse();
+            NumericTypeParser<double>.TryParse(input, out var _).Should().BeFalse();
         }
 
         [Test]
         public void Parse_should_throw_exception_on_failure()
         {
-            new Action(() => FloatingPointParser<double>.Parse("abc")).Should().Throw<FormatException>();
+            new Action(() => NumericTypeParser<double>.Parse("abc")).Should().Throw<FormatException>();
         }
     }
 }
