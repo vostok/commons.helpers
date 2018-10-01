@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Vostok.Commons.Helpers
 {
-    internal static class FloatingPointParser<TNumber>
+    internal static class NumericTypeParser<TNumber>
     {
         private static readonly TryParseDelegate TryParseMethod = GenerateTryParseMethod();
 
