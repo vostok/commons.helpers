@@ -11,7 +11,9 @@ namespace Vostok.Commons.Helpers.Network
             if (address.AddressFamily != AddressFamily.InterNetwork)
                 throw new ArgumentException("Address must be an IPv4 address.", nameof(address));
 
+#pragma warning disable 618
             var rawAddress = (uint) address.Address;
+#pragma warning restore 618
 
             return
                 ((rawAddress & 0x000000FFU) << 24) |
