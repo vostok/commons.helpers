@@ -36,6 +36,17 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         }
 
         [Test]
+        public void Subscribe_should_pass_initial_value_to_observer_immediately()
+        {
+            observable = new CachingObservable<string>("initial");
+
+            observable.Subscribe(observer1);
+
+            observer1.ReceivedCalls().Should().HaveCount(1);
+            observer1.Received().OnNext("initial");
+        }
+
+        [Test]
         public void Subscribe_should_pass_latest_value_to_observer_immediately()
         {
             observable.Next("1");
@@ -45,6 +56,21 @@ namespace Vostok.Commons.Helpers.Tests.Observable
 
             observer1.ReceivedCalls().Should().HaveCount(1);
             observer1.Received().OnNext("2");
+        }
+
+        [Test]
+        public void Subscribe_should_pass_latest_value_to_observer_immediately_even_after_completee()
+        {
+            observable.Next("1");
+            observable.Next("2");
+
+            observable.Complete();
+
+            observable.Subscribe(observer1);
+
+            observer1.ReceivedCalls().Should().HaveCount(2);
+            observer1.Received().OnNext("2");
+            observer1.Received().OnCompleted();
         }
 
         [Test]
@@ -112,6 +138,18 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         }
 
         [Test]
+        public void Error_should_prevent_further_complete()
+        {
+            observable.Error(error1);
+
+            observable.Subscribe(observer1);
+
+            observable.Complete();
+
+            observer1.DidNotReceive().OnCompleted();
+        }
+
+        [Test]
         public void Error_should_cause_all_new_subscribers_to_immediately_complete_with_error()
         {
             observable.Error(error1);
@@ -131,6 +169,42 @@ namespace Vostok.Commons.Helpers.Tests.Observable
 
             observer1.Received().OnNext("1");
             observer2.Received().OnNext("1");
+        }
+
+        [Test]
+        public void Complete_should_complete_all_current_observers()
+        {
+            observable.Subscribe(observer1);
+            observable.Subscribe(observer2);
+
+            observable.Complete();
+
+            observer1.Received().OnCompleted();
+            observer2.Received().OnCompleted();
+        }
+        
+        [Test]
+        public void Complete_should_prevent_any_further_subscriptions()
+        {
+            observable.Complete();
+
+            observable.Subscribe(observer1);
+
+            observable.Next("value");
+
+            observer1.DidNotReceive().OnNext("value");
+        }
+
+        [Test]
+        public void Complete_should_prevent_any_further_events()
+        {
+            observable.Subscribe(observer1);
+
+            observable.Complete();
+
+            observable.Next("value");
+
+            observer1.DidNotReceive().OnNext("value");
         }
 
         [Test]
