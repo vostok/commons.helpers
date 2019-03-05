@@ -36,6 +36,17 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         }
 
         [Test]
+        public void Subscribe_should_pass_initial_value_to_observer_immediately()
+        {
+            observable = new CachingObservable<string>("initial");
+
+            observable.Subscribe(observer1);
+
+            observer1.ReceivedCalls().Should().HaveCount(1);
+            observer1.Received().OnNext("initial");
+        }
+
+        [Test]
         public void Subscribe_should_pass_latest_value_to_observer_immediately()
         {
             observable.Next("1");

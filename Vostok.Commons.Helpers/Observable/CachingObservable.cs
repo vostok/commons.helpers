@@ -13,6 +13,16 @@ namespace Vostok.Commons.Helpers.Observable
         private Exception savedError;
         private bool started;
 
+        public CachingObservable()
+        {
+        }
+
+        public CachingObservable(T initialValue)
+        {
+            savedValue = initialValue;
+            started = true;
+        }
+
         public bool IsCompleted { get; private set; }
 
         public void Next([NotNull] T value)
