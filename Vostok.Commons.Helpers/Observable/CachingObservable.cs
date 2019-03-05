@@ -85,6 +85,8 @@ namespace Vostok.Commons.Helpers.Observable
                     {
                         // ignored
                     }
+
+                observers.Clear();
             }
         }
 
