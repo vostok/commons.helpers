@@ -13,7 +13,7 @@ namespace Vostok.Commons.Helpers.Observable
         private Exception savedError;
         private bool started;
 
-        public bool IsCompleted => savedError != null;
+        public bool IsCompleted { get; private set; }
 
         public void Next([NotNull] T value)
         {
@@ -50,6 +50,7 @@ namespace Vostok.Commons.Helpers.Observable
                 if (IsCompleted)
                     return;
 
+                IsCompleted = true;
                 savedError = error;
 
                 foreach (var observer in observers)
@@ -66,6 +67,27 @@ namespace Vostok.Commons.Helpers.Observable
             }
         }
 
+        public void Complete()
+        {
+            lock (sync)
+            {
+                if (IsCompleted)
+                    return;
+
+                IsCompleted = true;
+
+                foreach (var observer in observers)
+                    try
+                    {
+                        observer.OnCompleted();
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+            }
+        }
+
         public IDisposable Subscribe(IObserver<T> observer)
         {
             lock (sync)
@@ -78,6 +100,12 @@ namespace Vostok.Commons.Helpers.Observable
 
                 if (started)
                     observer.OnNext(savedValue);
+
+                if (IsCompleted)
+                {
+                    observer.OnCompleted();
+                    return new EmptyDisposable();
+                }
 
                 observers.Add(observer);
             }
