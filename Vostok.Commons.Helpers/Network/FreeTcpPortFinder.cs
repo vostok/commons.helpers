@@ -17,7 +17,7 @@ namespace Vostok.Commons.Helpers.Network
             try
             {
                 listener.Start();
-                return ((IPEndPoint) listener.LocalEndpoint).Port;
+                return ((IPEndPoint)listener.LocalEndpoint).Port;
             }
             finally
             {

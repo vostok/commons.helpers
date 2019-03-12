@@ -59,7 +59,7 @@ namespace Vostok.Commons.Helpers.Network
                         continue;
 
                     newGatewayAddresses.AddRange(gatewayAddresses);
-                    newLocalNetworks.AddRange(unicastAddresses.Select(uni => new IPv4Network(uni.Address, (byte) uni.PrefixLength)));
+                    newLocalNetworks.AddRange(unicastAddresses.Select(uni => new IPv4Network(uni.Address, (byte)uni.PrefixLength)));
                 }
 
                 GatewayAddresses = newGatewayAddresses;

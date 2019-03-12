@@ -51,7 +51,7 @@ namespace Vostok.Commons.Helpers.Url
                 }
                 else
                 {
-                    for (int i = 0; i < segment.Length; i++)
+                    for (var i = 0; i < segment.Length; i++)
                     {
                         builder.Append(ToLowerFast(segment[i]));
                     }
@@ -83,7 +83,7 @@ namespace Vostok.Commons.Helpers.Url
         {
             var segmentBeginning = 0;
 
-            for (int i = 0; i < path.Length; i++)
+            for (var i = 0; i < path.Length; i++)
             {
                 var current = path[i];
                 if (current == Slash)
@@ -108,7 +108,7 @@ namespace Vostok.Commons.Helpers.Url
             if (segment.IsEmpty)
                 return false;
 
-            for (int i = 0; i < Detectors.Length; i++)
+            for (var i = 0; i < Detectors.Length; i++)
             {
                 if (Detectors[i].IsLikelyUnique(segment))
                     return true;
@@ -146,7 +146,7 @@ namespace Vostok.Commons.Helpers.Url
         {
             if (c >= 'A' && c <= 'Z')
             {
-                return (char) (c + 32);
+                return (char)(c + 32);
             }
 
             return c;
@@ -184,7 +184,7 @@ namespace Vostok.Commons.Helpers.Url
         {
             public bool IsLikelyUnique(Segment segment)
             {
-                for (int i = 0; i < segment.Length; i++)
+                for (var i = 0; i < segment.Length; i++)
                 {
                     if (!IsAllowedCharacter(segment[i]))
                         return true;
@@ -206,7 +206,7 @@ namespace Vostok.Commons.Helpers.Url
             {
                 var consecutiveHexChars = 0;
 
-                for (int i = 0; i < segment.Length; i++)
+                for (var i = 0; i < segment.Length; i++)
                 {
                     if (IsHexCharacter(segment[i]))
                     {
@@ -233,7 +233,7 @@ namespace Vostok.Commons.Helpers.Url
             {
                 var sawDigits = false;
 
-                for (int i = 0; i < segment.Length; i++)
+                for (var i = 0; i < segment.Length; i++)
                 {
                     var current = segment[i];
                     var isDigit = current >= '0' && current <= '9';
@@ -304,25 +304,25 @@ namespace Vostok.Commons.Helpers.Url
 
         private static IEnumerable<char> EnumerateHexCharacters()
         {
-            for (char c = 'a'; c <= 'f'; c++)
+            for (var c = 'a'; c <= 'f'; c++)
                 yield return c;
 
-            for (char c = 'A'; c <= 'F'; c++)
+            for (var c = 'A'; c <= 'F'; c++)
                 yield return c;
 
-            for (char c = '0'; c <= '9'; c++)
+            for (var c = '0'; c <= '9'; c++)
                 yield return c;
         }
 
         private static IEnumerable<char> EnumerateAllowedCharacters()
         {
-            for (char c = 'a'; c <= 'z'; c++)
+            for (var c = 'a'; c <= 'z'; c++)
                 yield return c;
 
-            for (char c = 'A'; c <= 'Z'; c++)
+            for (var c = 'A'; c <= 'Z'; c++)
                 yield return c;
 
-            for (char c = '0'; c <= '9'; c++)
+            for (var c = '0'; c <= '9'; c++)
                 yield return c;
 
             yield return '.';
