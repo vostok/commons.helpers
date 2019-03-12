@@ -172,6 +172,18 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         }
 
         [Test]
+        public void Next_should_send_nulls()
+        {
+            observable.Subscribe(observer1);
+
+            observable.Next(null);
+            observable.Next("1");
+
+            observer1.Received().OnNext(null);
+            observer1.Received().OnNext("1");
+        }
+
+        [Test]
         public void Complete_should_complete_all_current_observers()
         {
             observable.Subscribe(observer1);

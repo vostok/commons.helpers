@@ -25,11 +25,8 @@ namespace Vostok.Commons.Helpers.Observable
 
         public bool IsCompleted { get; private set; }
 
-        public void Next([NotNull] T value)
+        public void Next([CanBeNull] T value)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
-
             lock (sync)
             {
                 if (IsCompleted)
@@ -100,7 +97,7 @@ namespace Vostok.Commons.Helpers.Observable
             }
         }
 
-        public void Complete([NotNull] T value)
+        public void Complete([CanBeNull] T value)
         {
             lock (sync)
             {
