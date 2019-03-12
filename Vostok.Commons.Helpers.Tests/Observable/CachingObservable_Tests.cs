@@ -208,6 +208,19 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         }
 
         [Test]
+        public void Complete_should_send_value()
+        {
+            observable.Subscribe(observer1);
+
+            observable.Complete("complete");
+
+            observable.Next("value");
+
+            observer1.Received().OnNext("complete");
+            observer1.DidNotReceive().OnNext("value");
+        }
+
+        [Test]
         public void Disposing_a_subscription_should_cause_the_subscriber_to_stop_getting_notifications()
         {
             observable.Subscribe(observer1);

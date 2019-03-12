@@ -100,6 +100,15 @@ namespace Vostok.Commons.Helpers.Observable
             }
         }
 
+        public void Complete([NotNull] T value)
+        {
+            lock (sync)
+            {
+                Next(value);
+                Complete();
+            }
+        }
+
         public IDisposable Subscribe(IObserver<T> observer)
         {
             lock (sync)
