@@ -18,6 +18,14 @@ namespace Vostok.Commons.Helpers.Tests.Extensions
         }
 
         [Test]
+        public void WaitAsync_should_not_wait_for_completed_task()
+        {
+            var wait = Task.CompletedTask.WaitAsync(10.Seconds());
+            wait.ShouldCompleteImmediately();
+            wait.Result.Should().BeTrue();
+        }
+
+        [Test]
         public void WaitAsync_should_wait_with_timeout()
         {
             var task = Task.Delay(10.Seconds());
