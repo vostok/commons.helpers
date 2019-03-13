@@ -14,6 +14,9 @@ namespace Vostok.Commons.Helpers.Extensions
         /// </summary>
         public static async Task<bool> WaitAsync(this Task task, TimeSpan timeout)
         {
+            if (task.IsCompleted)
+                return true;
+
             using (var cts = new CancellationTokenSource())
             {
                 var delay = Task.Delay(timeout, cts.Token);
