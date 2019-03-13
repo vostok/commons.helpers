@@ -17,3 +17,6 @@ full-build > notests:
   build:
     target: Vostok.Commons.Helpers.sln
     configuration: Release
+
+  deps:
+    - vostok.commons.testing
