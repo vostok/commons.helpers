@@ -19,4 +19,4 @@ full-build > notests:
     configuration: Release
 
   deps:
-    - vostok.commons.testing
+    - vostok.commons.testing/src
