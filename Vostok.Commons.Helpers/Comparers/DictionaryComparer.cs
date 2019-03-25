@@ -5,6 +5,8 @@ namespace Vostok.Commons.Helpers.Comparers
 {
     internal class DictionaryComparer<TKey, TValue> : IEqualityComparer<IReadOnlyDictionary<TKey, TValue>>
     {
+        public static readonly DictionaryComparer<TKey, TValue> Instance = new DictionaryComparer<TKey, TValue>();
+
         private readonly IEqualityComparer<TValue> valueComparer;
 
         public DictionaryComparer(IEqualityComparer<TValue> valueComparer = null)
