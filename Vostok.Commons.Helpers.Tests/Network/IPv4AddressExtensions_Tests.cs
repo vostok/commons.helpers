@@ -14,7 +14,7 @@ namespace Vostok.Commons.Helpers.Tests.Network
         public void ToUInt32_should_work_correctly()
         {
             var address = IPAddress.Parse("46.17.203.102");
-            
+
             address.ToUInt32().Should().Be(BitConverter.ToUInt32(address.GetAddressBytes().Reverse().ToArray(), 0));
         }
 
