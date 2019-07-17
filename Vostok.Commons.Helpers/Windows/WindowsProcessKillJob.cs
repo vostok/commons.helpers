@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Vostok.Commons.Helpers.Windows.WinApi;
 
@@ -41,7 +42,7 @@ namespace Vostok.Commons.Helpers.Windows
             Kernel32.CloseHandle(jobHandle);
         }
 
-        public void AddProcess(System.Diagnostics.Process process)
+        public void AddProcess(Process process)
         {
             if (process == null)
                 throw new ArgumentNullException(nameof(process));

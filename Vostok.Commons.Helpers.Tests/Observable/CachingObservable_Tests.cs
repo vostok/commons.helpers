@@ -194,7 +194,7 @@ namespace Vostok.Commons.Helpers.Tests.Observable
             observer1.Received().OnCompleted();
             observer2.Received().OnCompleted();
         }
-        
+
         [Test]
         public void Complete_should_prevent_any_further_subscriptions()
         {
@@ -260,5 +260,4 @@ namespace Vostok.Commons.Helpers.Tests.Observable
             observer2.Received().OnNext("1");
         }
     }
-
 }

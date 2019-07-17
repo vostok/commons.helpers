@@ -46,7 +46,7 @@ namespace Vostok.Commons.Helpers.Tests
         [Test]
         public void TryParse_should_throw_exception_for_invalid_number_type()
         {
-            new Action(() => NumericTypeParser<object>.TryParse("123", out var _)).Should().Throw<NotSupportedException>();
+            new Action(() => NumericTypeParser<object>.TryParse("123", out _)).Should().Throw<NotSupportedException>();
         }
 
         [TestCase("abc")]
@@ -54,7 +54,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase(null)]
         public void TryParse_should_return_false_for_invalid_input(string input)
         {
-            NumericTypeParser<double>.TryParse(input, out var _).Should().BeFalse();
+            NumericTypeParser<double>.TryParse(input, out _).Should().BeFalse();
         }
 
         [Test]
