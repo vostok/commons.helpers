@@ -11,7 +11,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase("1,23", 1.23)]
         [TestCase(" -1 000,23 ", -1000.23)]
         [TestCase("5,12e2", 512)]
-        [TestCase("5'12e-2", 5.12)]
+        [TestCase("512e-2", 5.12)]
         public void Should_parse_double_in_different_formats(string input, double expected)
         {
             NumericTypeParser<double>.TryParse(input, out var result).Should().BeTrue();
@@ -23,7 +23,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase("1,23", 1.23)]
         [TestCase(" -1 000,23 ", -1000.23)]
         [TestCase("5,12e2", 512)]
-        [TestCase("5'12e-2", 5.12)]
+        [TestCase("512e-2", 5.12)]
         public void Should_parse_decimal_in_different_formats(string input, double expected)
         {
             NumericTypeParser<decimal>.TryParse(input, out var result).Should().BeTrue();
@@ -35,7 +35,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase("1,23", 1.23f)]
         [TestCase(" -1 000,23 ", -1000.23f)]
         [TestCase("5,12e2", 512f)]
-        [TestCase("5'12e-2", 5.12f)]
+        [TestCase("512e-2", 5.12f)]
         public void Should_parse_float_in_different_formats(string input, float expected)
         {
             NumericTypeParser<float>.TryParse(input, out var result).Should().BeTrue();
