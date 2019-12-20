@@ -11,7 +11,7 @@ namespace Vostok.Commons.Helpers.Extensions
 
             using (cancellationToken.Register(o => ((TaskCompletionSource<bool>)o).TrySetCanceled(), tcs))
             {
-                await tcs.Task;
+                await tcs.Task.ConfigureAwait(false);
             }
         }
     }
