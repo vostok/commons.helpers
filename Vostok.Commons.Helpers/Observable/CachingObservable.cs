@@ -25,6 +25,19 @@ namespace Vostok.Commons.Helpers.Observable
 
         public bool IsCompleted { get; private set; }
 
+        public T Get()
+        {
+            lock (sync)
+            {
+                if (!started)
+                    throw new InvalidOperationException("Observable has not value.");
+                if (savedError != null)
+                    throw savedError;
+
+                return savedValue;
+            }
+        }
+
         public void Next([CanBeNull] T value)
         {
             lock (sync)
