@@ -17,7 +17,6 @@ namespace Vostok.Commons.Helpers.Extensions
                 }
                 catch (TaskCanceledException)
                 {
-
                 }
             }
         }

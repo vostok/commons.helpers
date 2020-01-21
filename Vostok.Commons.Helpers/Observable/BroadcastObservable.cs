@@ -60,7 +60,7 @@ namespace Vostok.Commons.Helpers.Observable
                     Interlocked.Exchange(ref observable.observers, newObservers);
                 }
             }
-        } 
+        }
 
         #endregion
     }

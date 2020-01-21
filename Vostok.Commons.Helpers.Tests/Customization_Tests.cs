@@ -18,7 +18,7 @@ namespace Vostok.Commons.Helpers.Tests
             customization.AddCustomization(
                 l =>
                 {
-                    var ll = new List<int>(l) { 2 };
+                    var ll = new List<int>(l) {2};
                     return ll;
                 });
 
@@ -28,13 +28,13 @@ namespace Vostok.Commons.Helpers.Tests
             customization.AddCustomization(
                 l =>
                 {
-                    var ll = new List<int>(l) { 4 };
+                    var ll = new List<int>(l) {4};
                     return ll;
                 });
 
-            var list = customization.Customize(new List<int> { 0 });
+            var list = customization.Customize(new List<int> {0});
 
-            list.Should().BeEquivalentTo(new List<int> { 0, 1, 2, 3, 4 }, options => options.WithStrictOrdering());
+            list.Should().BeEquivalentTo(new List<int> {0, 1, 2, 3, 4}, options => options.WithStrictOrdering());
         }
     }
 }

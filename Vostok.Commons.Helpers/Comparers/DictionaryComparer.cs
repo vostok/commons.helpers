@@ -36,6 +36,6 @@ namespace Vostok.Commons.Helpers.Comparers
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         public int GetHashCode(IReadOnlyDictionary<TKey, TValue> dictionary)
-            => dictionary == null ? 0 : dictionary.Aggregate(dictionary.Count, (current, element) => (current * 397) ^ valueComparer.GetHashCode(element.Value));
+            => dictionary == null ? 0 : dictionary.Aggregate(dictionary.Count, (current, element) => current ^ valueComparer.GetHashCode(element.Value));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+
 // ReSharper disable ParameterHidesMember
 
 namespace Vostok.Commons.Helpers
