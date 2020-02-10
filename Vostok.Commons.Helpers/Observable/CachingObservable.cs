@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Vostok.Commons.Helpers.Disposable;
 
 namespace Vostok.Commons.Helpers.Observable
 {
@@ -164,6 +163,17 @@ namespace Vostok.Commons.Helpers.Observable
                 {
                     observable.observers.Remove(observer);
                 }
+            }
+        }
+
+        #endregion
+
+        #region EmptyDisposable
+
+        private class EmptyDisposable : IDisposable
+        {
+            public void Dispose()
+            {
             }
         }
 
