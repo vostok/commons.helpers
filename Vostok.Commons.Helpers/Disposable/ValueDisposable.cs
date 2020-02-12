@@ -8,7 +8,7 @@ namespace Vostok.Commons.Helpers.Disposable
     {
         public readonly T Value;
         private readonly IDisposable disposable;
-        private bool disposed;
+        private volatile bool disposed;
 
         public ValueDisposable(T value, IDisposable disposable)
         {
