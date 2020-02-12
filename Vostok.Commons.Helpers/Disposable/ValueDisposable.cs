@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Disposable
@@ -7,8 +8,7 @@ namespace Vostok.Commons.Helpers.Disposable
     internal class ValueDisposable<T> : IDisposable
     {
         public readonly T Value;
-        private readonly IDisposable disposable;
-        private volatile bool disposed;
+        private volatile IDisposable disposable;
 
         public ValueDisposable(T value, IDisposable disposable)
         {
@@ -16,13 +16,7 @@ namespace Vostok.Commons.Helpers.Disposable
             this.disposable = disposable;
         }
 
-        public void Dispose()
-        {
-            if (!disposed)
-            {
-                disposed = true;
-                disposable?.Dispose();
-            }
-        }
+        public void Dispose() =>
+            Interlocked.Exchange(ref disposable, null)?.Dispose();
     }
 }
