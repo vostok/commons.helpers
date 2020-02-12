@@ -8,6 +8,7 @@ namespace Vostok.Commons.Helpers.Disposable
     {
         public readonly T Value;
         private readonly IDisposable disposable;
+        private bool disposed;
 
         public ValueDisposable(T value, IDisposable disposable)
         {
@@ -15,7 +16,13 @@ namespace Vostok.Commons.Helpers.Disposable
             this.disposable = disposable;
         }
 
-        public void Dispose() =>
-            disposable?.Dispose();
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                disposed = true;
+                disposable?.Dispose();
+            }
+        }
     }
 }
