@@ -13,7 +13,7 @@ namespace Vostok.Commons.Helpers.Network
         public static volatile List<IPAddress> GatewayAddresses;
 
         public static volatile List<IPv4Network> LocalNetworks;
-        private static readonly TimeSpan CacheTTL = TimeSpan.FromDays(1);
+        private static readonly TimeSpan CacheTtl = TimeSpan.FromDays(1);
 
         static NetworkHelper()
         {
@@ -27,7 +27,7 @@ namespace Vostok.Commons.Helpers.Network
         {
             Update();
 
-            Task.Delay(CacheTTL).ContinueWith(_ => UpdateAndSchedule());
+            Task.Delay(CacheTtl).ContinueWith(_ => UpdateAndSchedule());
         }
 
         private static void Update()
