@@ -23,7 +23,6 @@ namespace K4os.Compression.LZ4
         /// <param name="sourceLength">Length of input buffer.</param>
         /// <param name="target">Output buffer.</param>
         /// <param name="targetLength">Output buffer length.</param>
-        /// <param name="level">Compression level.</param>
         /// <returns>Number of bytes written, or negative value if output buffer is too small.</returns>
         public static unsafe int Encode(
             byte* source,
@@ -45,7 +44,6 @@ namespace K4os.Compression.LZ4
         /// <param name="target">Output buffer.</param>
         /// <param name="targetOffset">Output buffer offset.</param>
         /// <param name="targetLength">Output buffer length.</param>
-        /// <param name="level">Compression level.</param>
         /// <returns>Number of bytes written, or negative value if output buffer is too small.</returns>
         public static unsafe int Encode(
             byte[] source,
