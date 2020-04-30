@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using K4os.Compression.LZ4.Internal;
 
-// ReSharper disable IdentifierTypo
-// ReSharper disable InconsistentNaming
+// ReSharper disable All
+// Copied from https://github.com/MiloszKrajewski/K4os.Compression.LZ4
 
 namespace K4os.Compression.LZ4.Engine
 {

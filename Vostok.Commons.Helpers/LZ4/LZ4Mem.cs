@@ -2,6 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+// ReSharper disable All
+// Copied from https://github.com/MiloszKrajewski/K4os.Compression.LZ4
+
 namespace K4os.Compression.LZ4.Internal
 {
     /// <summary>Utility class with memory related functions.</summary>
