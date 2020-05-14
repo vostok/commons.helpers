@@ -6,6 +6,6 @@ namespace Vostok.Commons.Helpers.Extensions
     {
         public static TValue GetValueOrNull<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class =>
-            dictionary.TryGetValue(key, out var value) ? value : null;
+            dictionary != null && dictionary.TryGetValue(key, out var value) ? value : null;
     }
 }
