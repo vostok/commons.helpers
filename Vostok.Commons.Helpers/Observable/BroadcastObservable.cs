@@ -18,7 +18,14 @@ namespace Vostok.Commons.Helpers.Observable
         public void Push(T value)
         {
             foreach (var observer in observers)
-                observer?.OnNext(value);
+                try
+                {
+                    observer?.OnNext(value);
+                }
+                catch
+                {
+                    // ignored
+                }
         }
 
         public IDisposable Subscribe(IObserver<T> observer)
