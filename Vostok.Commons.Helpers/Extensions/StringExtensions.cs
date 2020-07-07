@@ -1,4 +1,6 @@
-﻿namespace Vostok.Commons.Helpers.Extensions
+﻿using System;
+
+namespace Vostok.Commons.Helpers.Extensions
 {
     internal static class StringExtensions
     {
@@ -45,5 +47,14 @@
                 return (int)hash;
             }
         }
+
+        public static bool IgnoreCaseEquals(this string value, string other) =>
+            string.Equals(value, other, StringComparison.OrdinalIgnoreCase);
+
+        public static string[] SplitRemovingEmpties(this string input, params char[] separator) =>
+            input.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+
+        public static string[] SplitRemovingEmpties(this string input, params string[] separator) =>
+            input.Split(separator, StringSplitOptions.RemoveEmptyEntries);
     }
 }
