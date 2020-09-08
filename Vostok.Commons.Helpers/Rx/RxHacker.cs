@@ -1,4 +1,6 @@
-﻿#pragma warning disable 618
+﻿using System.Reactive.PlatformServices;
+
+#pragma warning disable 618
 
 namespace Vostok.Commons.Helpers.Rx
 {
