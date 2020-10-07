@@ -36,12 +36,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Vostok.Commons.Time">
-      <HintPath>..\..\vostok.commons.time\Vostok.Commons.Time\bin\Release\netstandard2.0\Vostok.Commons.Time.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
-  <ItemGroup>
     <Compile Remove="Rx\RxHacker.cs" />
   </ItemGroup>
 
