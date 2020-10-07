@@ -20,4 +20,3 @@ full-build > notests:
 
   deps:
     - vostok.commons.testing/src
-    - vostok.commons.time/src
