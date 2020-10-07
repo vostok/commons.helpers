@@ -6,25 +6,6 @@ namespace Vostok.Commons.Helpers.Extensions
 {
     internal static class TaskExtensions
     {
-        public static Task<T> WithTimeout<T>(this Task<T> task, TimeBudget budget, string timeoutMessage) => task.WithTimeout(budget.Remaining, timeoutMessage);
-        
-        public static async Task<T> WithTimeout<T>(this Task<T> task, TimeSpan timeout, string timeoutMessage)
-        {
-            await ((Task) task).WithTimeout(timeout, timeoutMessage);
-
-            return await task;
-        }
-        
-        public static Task WithTimeout(this Task task, TimeBudget budget, string timeoutMessage) => task.WithTimeout(budget.Remaining, timeoutMessage);
-        
-        public static async Task WithTimeout(this Task task, TimeSpan timeout, string timeoutMessage)
-        {
-            if (!await task.WaitAsync(timeout))
-                throw new TimeoutException(timeoutMessage);
-
-            await task;
-        }
-        
         public static Task SilentlyContinue(this Task source) => source.ContinueWith(_ => {});
 
         /// <summary>
