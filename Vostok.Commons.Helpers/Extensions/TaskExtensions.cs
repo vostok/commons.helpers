@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Vostok.Commons.Time;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
