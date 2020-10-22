@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Comparers
 {
@@ -14,7 +15,7 @@ namespace Vostok.Commons.Helpers.Comparers
             this.elementComparer = elementComparer ?? EqualityComparer<T>.Default;
         }
 
-        public bool Equals(IReadOnlyList<T> x, IReadOnlyList<T> y)
+        public bool Equals([CanBeNull][ItemCanBeNull] IReadOnlyList<T> x, [CanBeNull][ItemCanBeNull] IReadOnlyList<T> y)
         {
             if (ReferenceEquals(x, y))
                 return true;
@@ -35,7 +36,7 @@ namespace Vostok.Commons.Helpers.Comparers
         }
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        public int GetHashCode(IReadOnlyList<T> list)
+        public int GetHashCode([CanBeNull] [ItemCanBeNull] IReadOnlyList<T> list)
             => list == null ? 0 : list.Aggregate(list.Count, (current, element) => (current * 397) ^ elementComparer.GetHashCode(element));
     }
 }
