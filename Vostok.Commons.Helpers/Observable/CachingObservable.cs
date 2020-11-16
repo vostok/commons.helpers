@@ -38,6 +38,17 @@ namespace Vostok.Commons.Helpers.Observable
             }
         }
 
+        public T GetOrDefault()
+        {
+            lock (sync)
+            {
+                if (!started || savedError != null)
+                    return default;
+
+                return savedValue;
+            }
+        }
+
         public void Next([CanBeNull] T value)
         {
             lock (sync)
