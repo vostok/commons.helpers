@@ -1,11 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
     internal static class DictionaryExtensions
     {
+        [Obsolete("Use GetValueOrDefault")]
         public static TValue GetValueOrNull<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class =>
             dictionary != null && dictionary.TryGetValue(key, out var value) ? value : null;
+
+        public static Dictionary<TKey, TValue> With<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue newValue)
+        {
+            dictionary[key] = newValue;
+            return dictionary;
+        }
+
+        public static IReadOnlyDictionary<TKey, TValue> With<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue newValue) =>
+            dictionary.ToDictionary().With(key, newValue);
+
+        public static Dictionary<TKey, TValue> Without<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+        {
+            dictionary.Remove(key);
+            return dictionary;
+        }
+
+        public static IReadOnlyDictionary<TKey, TValue> Without<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key) =>
+            dictionary.ToDictionary().Without(key);
+
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary) =>
+            dictionary.Select(p => p).ToDictionary(p => p.Key, p => p.Value);
     }
 }
