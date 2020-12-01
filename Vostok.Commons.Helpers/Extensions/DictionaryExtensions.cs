@@ -44,7 +44,7 @@ namespace Vostok.Commons.Helpers.Extensions
             var result = new Dictionary<TKey, TValue>();
 
             foreach (var element in source)
-                result[keySelector(element)] = await valueSelector(element);
+                result[keySelector(element)] = await valueSelector(element).ConfigureAwait(false);
 
             return result;
         }
