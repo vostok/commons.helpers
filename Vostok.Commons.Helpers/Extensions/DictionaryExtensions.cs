@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
@@ -31,5 +32,21 @@ namespace Vostok.Commons.Helpers.Extensions
 
         public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary) =>
             dictionary.Select(p => p).ToDictionary(p => p.Key, p => p.Value);
+
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> enumerable) =>
+            enumerable.ToDictionary(p => p.Key, p => p.Value);
+
+        public static async Task<Dictionary<TKey, TValue>> ToDictionaryAsync<TSource, TKey, TValue>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            Func<TSource, Task<TValue>> valueSelector)
+        {
+            var result = new Dictionary<TKey, TValue>();
+
+            foreach (var element in source)
+                result[keySelector(element)] = await valueSelector(element);
+
+            return result;
+        }
     }
 }
