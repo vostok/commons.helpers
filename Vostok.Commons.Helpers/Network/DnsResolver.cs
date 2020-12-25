@@ -14,15 +14,18 @@ namespace Vostok.Commons.Helpers.Network
 
         private readonly TimeSpan cacheTtl;
         private readonly TimeSpan resolveTimeout;
+        private readonly TimeSpan failsTtl;
+
         private readonly ConcurrentDictionary<string, (IPAddress[] addresses, DateTime validTo)> cache;
         private readonly ConcurrentDictionary<string, Lazy<Task<IPAddress[]>>> initialUpdateTasks;
 
         private int isUpdatingNow;
 
-        public DnsResolver(TimeSpan cacheTtl, TimeSpan resolveTimeout)
+        public DnsResolver(TimeSpan cacheTtl, TimeSpan resolveTimeout, TimeSpan? failsTtl = null)
         {
             this.cacheTtl = cacheTtl;
             this.resolveTimeout = resolveTimeout;
+            this.failsTtl = failsTtl ?? cacheTtl;
 
             cache = new ConcurrentDictionary<string, (IPAddress[] addresses, DateTime validTo)>(StringComparer.OrdinalIgnoreCase);
             initialUpdateTasks = new ConcurrentDictionary<string, Lazy<Task<IPAddress[]>>>(StringComparer.OrdinalIgnoreCase);
@@ -70,22 +73,24 @@ namespace Vostok.Commons.Helpers.Network
                 : EmptyAddresses;
         }
 
-        private static async Task<IPAddress[]> ResolveInternal(string hostname)
+        private static async Task<(bool isSuccessful, IPAddress[] addresses)> ResolveInternal(string hostname)
         {
             try
             {
-                return await Dns.GetHostAddressesAsync(hostname).ConfigureAwait(false);
+                var addresses = await Dns.GetHostAddressesAsync(hostname).ConfigureAwait(false);
+                return (true, addresses);
             }
             catch
             {
-                return EmptyAddresses;
+                return (false, EmptyAddresses);
             }
         }
 
         private async Task<IPAddress[]> ResolveAndUpdateCacheAsync(string hostname, DateTime currentTime)
         {
-            var addresses = await ResolveInternal(hostname).ConfigureAwait(false);
-            cache[hostname] = (addresses, currentTime + cacheTtl);
+            var (isSuccessful, addresses) = await ResolveInternal(hostname).ConfigureAwait(false);
+            var ttl = isSuccessful ? cacheTtl : failsTtl;
+            cache[hostname] = (addresses, currentTime + ttl);
             return addresses;
         }
     }
