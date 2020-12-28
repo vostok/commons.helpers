@@ -84,7 +84,6 @@ namespace Vostok.Commons.Helpers.Network
             }
         }
 
-        [ItemCanBeNull]
         private async Task<IPAddress[]> ResolveAndUpdateCacheAsync(string hostname, DateTime currentTime)
         {
             var addresses = await TryResolveInternal(hostname).ConfigureAwait(false);
