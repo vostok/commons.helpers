@@ -72,7 +72,7 @@ namespace Vostok.Commons.Helpers.Network
         }
 
         [ItemCanBeNull]
-        private static async Task<IPAddress[]> ResolveInternal(string hostname)
+        private static async Task<IPAddress[]> TryResolveInternal(string hostname)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Vostok.Commons.Helpers.Network
         [ItemCanBeNull]
         private async Task<IPAddress[]> ResolveAndUpdateCacheAsync(string hostname, DateTime currentTime)
         {
-            var addresses = await ResolveInternal(hostname).ConfigureAwait(false);
+            var addresses = await TryResolveInternal(hostname).ConfigureAwait(false);
             if (addresses != null)
                 cache[hostname] = (addresses, currentTime + cacheTtl);
 
