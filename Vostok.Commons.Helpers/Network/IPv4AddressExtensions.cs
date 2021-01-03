@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Network
 {
+    [PublicAPI]
     internal static class IPv4AddressExtensions
     {
         public static uint ToUInt32(this IPAddress address)

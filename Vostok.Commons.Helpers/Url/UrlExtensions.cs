@@ -1,7 +1,9 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Url
 {
+    [PublicAPI]
     internal static class UrlExtensions
     {
         public static string ToStringWithoutQuery(this Uri url) =>

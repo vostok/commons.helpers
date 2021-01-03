@@ -1,7 +1,9 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
+    [PublicAPI]
     internal static class StringExtensions
     {
         // (iloktionov): Default implementation of string.GetHashCode() returns values that may vary from machine to machine.

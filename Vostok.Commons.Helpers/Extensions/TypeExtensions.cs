@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
+    [PublicAPI]
     internal static class TypeExtensions
     {
         public static bool IsNullable(this Type type) => Nullable.GetUnderlyingType(type) != null;

@@ -2,10 +2,12 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using Vostok.Commons.Helpers.Windows.WinApi;
 
 namespace Vostok.Commons.Helpers.Windows
 {
+    [PublicAPI]
     internal class WindowsProcessKillJob : IDisposable
     {
         private readonly IntPtr jobHandle;

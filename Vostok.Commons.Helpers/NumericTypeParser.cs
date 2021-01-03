@@ -2,9 +2,11 @@
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers
 {
+    [PublicAPI]
     internal static class NumericTypeParser<TNumber>
     {
         private static readonly TryParseDelegate TryParseMethod = GenerateTryParseMethod();

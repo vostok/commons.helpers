@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers
 {
+    [PublicAPI]
     internal class Enum<T>
     {
         // ReSharper disable once StaticMemberInGenericType

@@ -1,11 +1,13 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Network
 {
     /// <summary>
     /// Helper class to discover free TCP ports.
     /// </summary>
+    [PublicAPI]
     internal static class FreeTcpPortFinder
     {
         /// <summary>

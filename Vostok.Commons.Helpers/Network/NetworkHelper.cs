@@ -5,9 +5,11 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Network
 {
+    [PublicAPI]
     internal static class NetworkHelper
     {
         public static volatile List<IPAddress> GatewayAddresses;

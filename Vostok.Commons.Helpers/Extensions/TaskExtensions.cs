@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
+    [PublicAPI]
     internal static class TaskExtensions
     {
         public static Task SilentlyContinue(this Task source) => source.ContinueWith(_ => {});

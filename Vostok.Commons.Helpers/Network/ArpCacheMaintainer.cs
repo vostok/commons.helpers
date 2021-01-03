@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Network
 {
+    [PublicAPI]
     internal static unsafe class ArpCacheMaintainer
     {
         private static readonly ConcurrentDictionary<IPAddress, DateTime> ActiveAddresses;

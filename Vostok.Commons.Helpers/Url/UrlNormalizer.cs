@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Url
 {
+    [PublicAPI]
     internal static class UrlNormalizer
     {
         private const char Slash = '/';

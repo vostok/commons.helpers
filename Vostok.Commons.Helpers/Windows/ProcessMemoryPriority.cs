@@ -1,6 +1,9 @@
-﻿namespace Vostok.Commons.Helpers.Windows
+﻿using JetBrains.Annotations;
+
+namespace Vostok.Commons.Helpers.Windows
 {
-    public enum ProcessMemoryPriority : uint
+    [PublicAPI]
+    internal enum ProcessMemoryPriority : uint
     {
         VeryLow = 1,
         Low = 2,

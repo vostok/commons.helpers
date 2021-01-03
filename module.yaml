@@ -10,6 +10,9 @@ notests *default:
     tool:
       name: dotnet
 
+  install:
+    - Vostok.Commons.Helpers/bin/Release/netstandard2.0/Vostok.Commons.Helpers.dll
+
   deps:
     - vostok.devtools
 
