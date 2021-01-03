@@ -1,9 +1,11 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 // ReSharper disable ParameterHidesMember
 
 namespace Vostok.Commons.Helpers
 {
+    [PublicAPI]
     internal class Customization<T>
     {
         private Func<T, T> customization;

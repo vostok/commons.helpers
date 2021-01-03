@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Network
 {
+    [PublicAPI]
     internal class IPv4Network
     {
         private readonly uint networkBegin;

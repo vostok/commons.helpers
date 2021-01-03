@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Comparers
 {
+    [PublicAPI]
     internal class DictionaryComparer<TKey, TValue> : IEqualityComparer<IReadOnlyDictionary<TKey, TValue>>
     {
         public static readonly DictionaryComparer<TKey, TValue> Instance = new DictionaryComparer<TKey, TValue>();

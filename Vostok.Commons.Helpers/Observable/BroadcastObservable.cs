@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Observable
 {
     /// <summary>
     /// A lock-free observable (apart from subscriptions) that never completes and has no caching.
     /// </summary>
+    [PublicAPI]
     internal class BroadcastObservable<T> : IObservable<T>
     {
         private readonly object observersLock = new object();

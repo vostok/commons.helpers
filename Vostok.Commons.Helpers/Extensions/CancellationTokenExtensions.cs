@@ -1,8 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
+    [PublicAPI]
     internal static class CancellationTokenExtensions
     {
         public static async Task WaitAsync(this CancellationToken cancellationToken)

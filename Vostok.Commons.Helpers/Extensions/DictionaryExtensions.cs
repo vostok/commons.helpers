@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Extensions
 {
+    [PublicAPI]
     internal static class DictionaryExtensions
     {
         [Obsolete("Use GetValueOrDefault")]

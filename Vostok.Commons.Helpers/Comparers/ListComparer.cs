@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Comparers
 {
+    [PublicAPI]
     internal class ListComparer<T> : IEqualityComparer<IReadOnlyList<T>>
     {
         public static readonly ListComparer<T> Instance = new ListComparer<T>();
@@ -15,7 +16,7 @@ namespace Vostok.Commons.Helpers.Comparers
             this.elementComparer = elementComparer ?? EqualityComparer<T>.Default;
         }
 
-        public bool Equals([CanBeNull][ItemCanBeNull] IReadOnlyList<T> x, [CanBeNull][ItemCanBeNull] IReadOnlyList<T> y)
+        public bool Equals([ItemCanBeNull] IReadOnlyList<T> x, [ItemCanBeNull] IReadOnlyList<T> y)
         {
             if (ReferenceEquals(x, y))
                 return true;

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Windows
 {
-    public static class ProcessPriorityHelper
+    [PublicAPI]
+    internal static class ProcessPriorityHelper
     {
         private enum PROCESS_INFORMATION_CLASS
         {
