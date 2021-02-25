@@ -9,7 +9,7 @@ namespace Vostok.Commons.Helpers.Extensions
     [PublicAPI]
     internal static class DictionaryExtensions
     {
-        [Obsolete("Use GetValueOrDefault")]
+        [Obsolete("Use ?.GetValueOrDefault() instead.")]
         public static TValue GetValueOrNull<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class =>
             dictionary != null && dictionary.TryGetValue(key, out var value) ? value : null;
