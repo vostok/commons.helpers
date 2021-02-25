@@ -8,11 +8,6 @@ namespace Vostok.Commons.Helpers.Windows
     [PublicAPI]
     internal static class ProcessPriorityHelper
     {
-        private enum PROCESS_INFORMATION_CLASS
-        {
-            ProcessMemoryPriority = 39,
-        }
-
         /// <summary>
         /// http://msdn.microsoft.com/en-us/library/windows/desktop/hh448387(v=vs.85).aspx
         /// </summary>
@@ -20,7 +15,7 @@ namespace Vostok.Commons.Helpers.Windows
         {
             var priorityInfo = new MEMORY_PRIORITY_INFORMATION
             {
-                MemoryPriority = (uint) priority
+                MemoryPriority = (uint)priority
             };
 
             var priorityInfoLength = Marshal.SizeOf(priorityInfo);
@@ -28,7 +23,7 @@ namespace Vostok.Commons.Helpers.Windows
 
             Marshal.StructureToPtr(priorityInfo, priorityInfoPointer, false);
 
-            NtSetInformationProcess(Process.GetCurrentProcess().Handle, PROCESS_INFORMATION_CLASS.ProcessMemoryPriority, priorityInfoPointer, (uint) priorityInfoLength);
+            NtSetInformationProcess(Process.GetCurrentProcess().Handle, PROCESS_INFORMATION_CLASS.ProcessMemoryPriority, priorityInfoPointer, (uint)priorityInfoLength);
         }
 
         /// <summary>
@@ -41,6 +36,11 @@ namespace Vostok.Commons.Helpers.Windows
 
         [DllImport("ntdll.dll", SetLastError = true)]
         private static extern bool NtSetInformationProcess(IntPtr hProcess, PROCESS_INFORMATION_CLASS ProcessInformationClass, IntPtr ProcessInformation, uint ProcessInformationSize);
+
+        private enum PROCESS_INFORMATION_CLASS
+        {
+            ProcessMemoryPriority = 39,
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         private struct MEMORY_PRIORITY_INFORMATION
