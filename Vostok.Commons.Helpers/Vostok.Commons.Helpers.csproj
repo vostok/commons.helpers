@@ -29,4 +29,8 @@
     <RepositoryUrl>https://github.com/vostok/commons.helpers</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
 </Project>
