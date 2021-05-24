@@ -9,7 +9,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Vostok.Commons.Helpers.Json
 {
-    [PublicAPI]
     internal class ComplexDictionaryJsonConverter : JsonConverter
     {
         private const string KeyFieldName = "Key";

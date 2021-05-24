@@ -7,7 +7,6 @@ using Newtonsoft.Json.Converters;
 
 namespace Vostok.Commons.Helpers.Json
 {
-    [PublicAPI]
     internal static class JsonExtensions
     {
         private static readonly IList<JsonConverter> Converters = new List<JsonConverter>
@@ -31,13 +30,10 @@ namespace Vostok.Commons.Helpers.Json
 
         public static string ToJson(this object @object) => JsonConvert.SerializeObject(@object, Settings);
 
-        [CanBeNull]
         public static T FromJson<T>(this string serialized) => JsonConvert.DeserializeObject<T>(serialized, Settings);
 
-        [CanBeNull]
         public static object FromJson(this string serialized, Type type) => JsonConvert.DeserializeObject(serialized, type, Settings);
 
-        [CanBeNull]
         public static object FromJson(this string serialized) => JsonConvert.DeserializeObject(serialized, Settings);
     }
 }
