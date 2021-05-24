@@ -27,14 +27,17 @@ namespace Vostok.Commons.Helpers.Json
 
         private static readonly JsonSerializer Serializer = JsonSerializer.CreateDefault(Settings);
 
-        public static string ToPrettyJson(this object @object) => JsonConvert.SerializeObject(@object, Formatting.Indented, Settings);
+        public static string ToPrettyJson(this object @object) => JsonConvert.SerializeObject(@object, Newtonsoft.Json.Formatting.Indented, Settings);
 
         public static string ToJson(this object @object) => JsonConvert.SerializeObject(@object, Settings);
 
+        [CanBeNull]
         public static T FromJson<T>(this string serialized) => JsonConvert.DeserializeObject<T>(serialized, Settings);
 
+        [CanBeNull]
         public static object FromJson(this string serialized, Type type) => JsonConvert.DeserializeObject(serialized, type, Settings);
 
+        [CanBeNull]
         public static object FromJson(this string serialized) => JsonConvert.DeserializeObject(serialized, Settings);
     }
 }
