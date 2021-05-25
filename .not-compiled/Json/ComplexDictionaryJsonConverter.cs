@@ -52,7 +52,7 @@ namespace Vostok.Commons.Helpers.Json
             var array = JArray.Load(reader);
 
             var args = FindDictionaryGenericArguments(objectType) ?? throw new InvalidOperationException();
-            return ReadJsonInternalMethod.MakeGenericMethod(args.Key, args.Value).Invoke(null, new object[] {array, serializer, objectType});
+            return ReadJsonInternalMethod.MakeGenericMethod(args.Key, args.Value).Invoke(null, new object[] {array, serializer});
         }
 
         public override bool CanConvert(Type objectType)
