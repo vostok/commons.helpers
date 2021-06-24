@@ -31,7 +31,7 @@ namespace Vostok.Commons.Helpers.Tests.Url
         [Test]
         public void Parse_should_parse_urls()
         {
-            var urls = new List<string> {"http://vm-app1:4740/", "http://vm-app2:4740/", "http://vm-app3:4741/"};
+            var urls = new List<string> {"http://vm-app1:4740/", "http://vm-app2:4740/", "http://vm-app3:4741/", "http://host.com/", "http://host"};
             UrlParser.Parse(urls).Should().BeEquivalentTo(urls.Select(u => new Uri(u)));
         }
 
@@ -46,6 +46,13 @@ namespace Vostok.Commons.Helpers.Tests.Url
         public void Parse_should_not_parse_null_urls()
         {
             UrlParser.Parse((IEnumerable<string>)null).Should().BeNull();
+        }
+
+        [Test]
+        public void Parse_should_not_parse_urls_without_scheme()
+        {
+            var urls = new List<string> {"vm-app1:4740/path/", "vm-app1:4740", "host.com", "host.domain.com", "host.com/path/", "clusterconfig", "clusterconfig/path"};
+            UrlParser.Parse(urls).Should().BeEmpty();
         }
     }
 }

@@ -15,9 +15,10 @@ namespace Vostok.Commons.Helpers.Url
 
         public static Uri Parse(string url)
         {
-            return !Uri.TryCreate(url, UriKind.Absolute, out var parsed)
-                ? null
-                : parsed;
+            var uri = !Uri.TryCreate(url, UriKind.Absolute, out var parsed) ? null : parsed;
+            if (uri == null || string.IsNullOrEmpty(uri.Host) || uri.Port == -1)
+                return null;
+            return uri;
         }
     }
 }
