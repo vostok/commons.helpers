@@ -11,9 +11,17 @@ namespace Vostok.Commons.Helpers.Observable
     [PublicAPI]
     internal class BroadcastObservable<T> : IObservable<T>
     {
+        private readonly Action<Exception> errorCallback;
         private readonly object observersLock = new object();
 
         private volatile List<IObserver<T>> observers = new List<IObserver<T>>();
+
+        public BroadcastObservable() {}
+
+        public BroadcastObservable(Action<Exception> errorCallback)
+        {
+            this.errorCallback = errorCallback;
+        }
 
         public bool HasObservers => observers.Count > 0;
 
@@ -24,9 +32,9 @@ namespace Vostok.Commons.Helpers.Observable
                 {
                     observer?.OnNext(value);
                 }
-                catch
+                catch (Exception e)
                 {
-                    // ignored
+                    errorCallback?.Invoke(e);
                 }
         }
 
