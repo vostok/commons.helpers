@@ -34,5 +34,10 @@ namespace Vostok.Commons.Helpers.Extensions
 
             return true;
         }
+
+        // note (kungurtsev, 09.11.2021): hack net6.0 new method
+        /// <inheritdoc cref="WaitAsync"/>
+        internal static Task<bool> TryWaitAsync(this Task task, TimeSpan timeout) =>
+            WaitAsync(task, timeout);
     }
 }

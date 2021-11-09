@@ -39,6 +39,10 @@ namespace Vostok.Commons.Helpers.Network
             }
         }
 
+        public IPAddress NetworkAddress { get; }
+
+        public byte NetworkCidr { get; }
+
         public static bool TryParse(string input, out IPv4Network network)
         {
             network = null;
@@ -74,10 +78,6 @@ namespace Vostok.Commons.Helpers.Network
 
             return network;
         }
-
-        public IPAddress NetworkAddress { get; }
-
-        public byte NetworkCidr { get; }
 
         public bool Contains(IPAddress address)
         {
