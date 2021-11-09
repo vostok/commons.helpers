@@ -16,7 +16,9 @@ namespace Vostok.Commons.Helpers.Observable
 
         private volatile List<IObserver<T>> observers = new List<IObserver<T>>();
 
-        public BroadcastObservable() {}
+        public BroadcastObservable()
+        {
+        }
 
         public BroadcastObservable(Action<Exception> errorCallback)
         {
