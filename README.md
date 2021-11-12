@@ -1,6 +1,6 @@
 # Vostok.Commons.Helpers
 
-[![Build status](https://ci.appveyor.com/api/projects/status/github/vostok/commons.helpers?svg=true&branch=master)](https://ci.appveyor.com/project/vostok/commons.helpers/branch/master)
+[![Build & Test & Publish](https://github.com/vostok/commons.helpers/actions/workflows/ci.yml/badge.svg)](https://github.com/vostok/commons.helpers/actions/workflows/ci.yml)
 
 This library contains various helpers used across multiple Vostok libraries that don't fit to any other `vostok.commons.*` module. 
 
