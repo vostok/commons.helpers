@@ -14,7 +14,7 @@ namespace Vostok.Commons.Helpers.Extensions
         /// <para>Returns true if <paramref name="task"/> finished within given <paramref name="timeout"/>.</para>
         /// <para>Does not stop or cancel given <paramref name="task"/></para>
         /// </summary>
-        public static async Task<bool> WaitAsync(this Task task, TimeSpan timeout)
+        public static async Task<bool> TryWaitAsync(this Task task, TimeSpan timeout)
         {
             if (task.IsCompleted)
                 return true;
@@ -35,9 +35,9 @@ namespace Vostok.Commons.Helpers.Extensions
             return true;
         }
 
-        // note (kungurtsev, 09.11.2021): hack net6.0 new method
         /// <inheritdoc cref="WaitAsync"/>
-        internal static Task<bool> TryWaitAsync(this Task task, TimeSpan timeout) =>
-            WaitAsync(task, timeout);
+        [Obsolete("Use TryWaitAsync method instead.")]
+        internal static Task<bool> WaitAsync(this Task task, TimeSpan timeout) =>
+            TryWaitAsync(task, timeout);
     }
 }

@@ -14,13 +14,13 @@ namespace Vostok.Commons.Helpers.Tests.Extensions
         public void WaitAsync_should_wait_for_task()
         {
             var task = Task.Delay(0.5.Seconds());
-            task.WaitAsync(10.Seconds()).ShouldCompleteIn(1.Seconds()).Should().BeTrue();
+            task.TryWaitAsync(10.Seconds()).ShouldCompleteIn(1.Seconds()).Should().BeTrue();
         }
 
         [Test]
         public void WaitAsync_should_not_wait_for_completed_task()
         {
-            var wait = Task.CompletedTask.WaitAsync(10.Seconds());
+            var wait = Task.CompletedTask.TryWaitAsync(10.Seconds());
             wait.ShouldCompleteImmediately();
             wait.Result.Should().BeTrue();
         }
@@ -29,7 +29,7 @@ namespace Vostok.Commons.Helpers.Tests.Extensions
         public void WaitAsync_should_wait_with_timeout()
         {
             var task = Task.Delay(10.Seconds());
-            task.WaitAsync(0.5.Seconds()).ShouldCompleteIn(1.Seconds()).Should().BeFalse();
+            task.TryWaitAsync(0.5.Seconds()).ShouldCompleteIn(1.Seconds()).Should().BeFalse();
             task.ShouldNotCompleteIn(0.5.Seconds());
         }
     }
