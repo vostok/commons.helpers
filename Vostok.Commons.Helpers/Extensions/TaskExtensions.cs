@@ -37,7 +37,7 @@ namespace Vostok.Commons.Helpers.Extensions
 
         /// <inheritdoc cref="WaitAsync"/>
         [Obsolete("Use TryWaitAsync method instead.")]
-        internal static Task<bool> WaitAsync(this Task task, TimeSpan timeout) =>
+        public static Task<bool> WaitAsync(this Task task, TimeSpan timeout) =>
             TryWaitAsync(task, timeout);
     }
 }
