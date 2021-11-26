@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace Vostok.Commons.Helpers.Observable
 {
     [PublicAPI]
-    internal class CachingObservable<T> : IObservable<T>
+    internal class CachingObservable<T> : ICachingObservable<T>
     {
         private readonly List<IObserver<T>> observers = new List<IObserver<T>>();
         private readonly object sync = new object();
