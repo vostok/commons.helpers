@@ -42,7 +42,7 @@ namespace Vostok.Commons.Helpers.Observable
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [PublicAPI]
-    internal class LockFreeReadingCachingObservable<T> : ICachingObservable<T>
+    internal class LockFreeReadingCachingObservable<T> : IObservable<T>
         where T : class
     {
         private const int Started = 1;
