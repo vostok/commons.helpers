@@ -7,7 +7,7 @@ using Vostok.Commons.Helpers.Observable;
 namespace Vostok.Commons.Helpers.Tests.Observable
 {
     [TestFixture]
-    internal abstract class LockFreeCachingObservable_Tests
+    internal class LockFreeCachingObservable_Tests
     {
         private LockFreeReadingCachingObservable<string> observable;
         private IObserver<string> observer1;

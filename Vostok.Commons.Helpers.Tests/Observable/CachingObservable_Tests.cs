@@ -7,7 +7,7 @@ using Vostok.Commons.Helpers.Observable;
 namespace Vostok.Commons.Helpers.Tests.Observable
 {
     [TestFixture]
-    internal abstract class CachingObservable_Tests
+    internal class CachingObservable_Tests
     {
         private CachingObservable<string> observable;
         private IObserver<string> observer1;
