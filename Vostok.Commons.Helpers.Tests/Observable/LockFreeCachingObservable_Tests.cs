@@ -7,9 +7,9 @@ using Vostok.Commons.Helpers.Observable;
 namespace Vostok.Commons.Helpers.Tests.Observable
 {
     [TestFixture]
-    internal abstract class CachingObservable_Tests
+    internal abstract class LockFreeCachingObservable_Tests
     {
-        private CachingObservable<string> observable;
+        private LockFreeReadingCachingObservable<string> observable;
         private IObserver<string> observer1;
         private IObserver<string> observer2;
         private Exception error1;
@@ -36,7 +36,7 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         [Test]
         public void Subscribe_should_pass_initial_value_to_observer_immediately()
         {
-            observable = new CachingObservable<string>("initial");
+            observable = new LockFreeReadingCachingObservable<string>("initial");
 
             observable.Subscribe(observer1);
 
