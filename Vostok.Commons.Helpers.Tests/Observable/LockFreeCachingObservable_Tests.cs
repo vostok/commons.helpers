@@ -18,6 +18,7 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         [SetUp]
         public void TestSetup()
         {
+            observable = new LockFreeReadingCachingObservable<string>();
             observer1 = Substitute.For<IObserver<string>>();
             observer2 = Substitute.For<IObserver<string>>();
 
