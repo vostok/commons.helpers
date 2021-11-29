@@ -19,6 +19,7 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         public void TestSetup()
         {
             observable = new CachingObservable<string>();
+
             observer1 = Substitute.For<IObserver<string>>();
             observer2 = Substitute.For<IObserver<string>>();
 

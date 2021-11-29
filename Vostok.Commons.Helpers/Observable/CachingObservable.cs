@@ -54,6 +54,7 @@ namespace Vostok.Commons.Helpers.Observable
         /// </summary>
         private readonly List<IObserver<T>> observers = new List<IObserver<T>>();
 
+        [NotNull]
         private State state;
 
         public CachingObservable()
