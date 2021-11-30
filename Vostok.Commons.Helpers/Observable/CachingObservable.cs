@@ -50,7 +50,7 @@ namespace Vostok.Commons.Helpers.Observable
 
         /// <summary>
         /// This collection is readonly and always exists as a single object (tied to this class instance).
-        /// Se we can use it as "lock" object.
+        /// So we can use it as "lock" object.
         /// </summary>
         private readonly List<IObserver<T>> observers = new List<IObserver<T>>();
 
