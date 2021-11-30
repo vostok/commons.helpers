@@ -11,20 +11,16 @@ namespace Vostok.Commons.Helpers.Observable
     ///         <term>This class has a simple 4-state machine:</term>
     ///     </listheader>
     ///     <item>
-    ///         <term>1. Initial state</term>
-    ///         <description>value = null, error = null, completed = false</description>
+    ///         <description>1 - Initial state. Value = null, error = null, completed = false</description>
     ///     </item>
     ///     <item>
-    ///         <term>2. State with value</term>
-    ///         <description>value = value, error = null, completed = false</description>
+    ///         <description>2 - State with value. Value = value, error = null, completed = false</description>
     ///     </item>
     ///     <item>
-    ///         <term>3. Completed</term>
-    ///         <description>value = any, error = null, completed = true</description>
+    ///         <description>3 - Completed. Value = any, error = null, completed = true</description>
     ///     </item>
     ///     <item>
-    ///         <term>4. Completed with error</term>
-    ///         <description>value = any, error = Err,  completed = true</description>
+    ///         <description>4 - Completed with error. Value = any, error = Err,  completed = true</description>
     ///     </item>
     /// </list>
     /// 
@@ -32,13 +28,13 @@ namespace Vostok.Commons.Helpers.Observable
     ///     <listheader>
     ///         <term>Allowed transitions are:</term>
     ///     </listheader>
-    ///     <item><term>1 - initial</term></item>
-    ///     <item><term>1 -> 2 (obtaining the first value); 1 -> 3; 1 -> 4;</term></item>
-    ///     <item><term>2 -> 2 (with another value); 2 -> 3; 2 -> 4;</term></item>
-    ///     <item><term>3, 4 - terminal</term></item>
+    ///     <item><description>1 - initial</description></item>
+    ///     <item><description>1 -> 2 (obtaining the first value); 1 -> 3; 1 -> 4;</description></item>
+    ///     <item><description>2 -> 2 (with another value); 2 -> 3; 2 -> 4;</description></item>
+    ///     <item><description>3, 4 - terminal</description></item>
     /// </list>
     /// 
-    /// All state changes occur under one lock. Reading without locks. Read safety is achieved by the atomic state changes and atomic state reads.
+    /// All state changes occur under one lock. Weak reading without locks. Read safety is achieved by the atomic state changes and atomic state reads.
     /// 
     /// </summary>
     [PublicAPI]
@@ -55,7 +51,7 @@ namespace Vostok.Commons.Helpers.Observable
         private readonly List<IObserver<T>> observers = new List<IObserver<T>>();
 
         [NotNull]
-        private State state;
+        private volatile State state;
 
         public CachingObservable()
         {
@@ -69,6 +65,17 @@ namespace Vostok.Commons.Helpers.Observable
 
         public T Get()
         {
+            lock (observers)
+            {
+                return GetWeak();
+            }
+        }
+
+        /// <summary>
+        /// LockFree implementation of the <see cref="Get"/> method. May return a new value slightly before observers receive <see cref="IObserver{T}.OnNext"/> event.
+        /// </summary>
+        public T GetWeak()
+        {
             var cachedState = state;
 
             if (!cachedState.WithValue())
@@ -80,6 +87,17 @@ namespace Vostok.Commons.Helpers.Observable
         }
 
         public T GetOrDefault()
+        {
+            lock (observers)
+            {
+                return GetOrDefaultWeak();
+            }
+        }
+
+        /// <summary>
+        /// LockFree implementation of the <see cref="GetOrDefault"/> method. May return a new value slightly before observers receive <see cref="IObserver{T}.OnNext"/> event.
+        /// </summary>
+        public T GetOrDefaultWeak()
         {
             var cachedState = state;
 
