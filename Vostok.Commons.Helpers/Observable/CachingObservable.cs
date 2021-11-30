@@ -72,7 +72,7 @@ namespace Vostok.Commons.Helpers.Observable
             var cachedState = state;
 
             if (!cachedState.WithValue())
-                throw new InvalidOperationException("Observable has not value.");
+                throw new InvalidOperationException("Observable has no value.");
             if (cachedState.SavedError != null)
                 throw cachedState.SavedError;
 
