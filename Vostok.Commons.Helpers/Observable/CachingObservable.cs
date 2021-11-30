@@ -63,6 +63,8 @@ namespace Vostok.Commons.Helpers.Observable
             state = new State(initialValue, HasValue, null);
         }
 
+        public bool IsCompleted => state.IsCompleted();
+
         public T Get()
         {
             lock (observers)
