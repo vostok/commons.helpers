@@ -121,10 +121,10 @@ namespace Vostok.Commons.Helpers.Observable
             lock (observers)
             {
                 var cachedState = state;
-                var cachedObservers = observers.Keys.ToArray();
-
                 if (cachedState.IsCompleted())
                     return;
+
+                var cachedObservers = observers.Keys.ToArray();
 
                 state = new State(nextValue, cachedState.Flags | HasValue, cachedState.SavedError);
 
