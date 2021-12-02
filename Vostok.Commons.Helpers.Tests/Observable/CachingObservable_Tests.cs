@@ -59,7 +59,7 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         }
 
         [Test]
-        public void Subscribe_should_pass_latest_value_to_observer_immediately_even_after_completee()
+        public void Subscribe_should_pass_latest_value_to_observer_immediately_even_after_complete()
         {
             observable.Next("1");
             observable.Next("2");
@@ -258,6 +258,61 @@ namespace Vostok.Commons.Helpers.Tests.Observable
 
             observer1.Received().OnNext("1");
             observer2.Received().OnNext("1");
+        }
+
+        [Test]
+        public void Should_work_with_multiple_subscribes_and_disposes()
+        {
+            var d1 = observable.Subscribe(observer1);
+            var d2 = observable.Subscribe(observer1);
+
+            d1.Should().Be(d2);
+
+            observable.Next("1");
+
+            observer1.Received(1).OnNext("1");
+            
+            d1.Dispose();
+            d1.Dispose();
+            
+            observable.Next("2");
+            
+            observer1.DidNotReceive().OnNext("2");
+        }
+        
+        [Test]
+        public void Should_not_deadlock_on_subscribe_during_on_next()
+        {
+            observer1
+                .WhenForAnyArgs(o => o.OnNext(default))
+                .Do(_ => observable.Subscribe(observer2));
+            
+            observable.Subscribe(observer1);
+
+            observable.Next("1");
+            observable.Next("2");
+
+            observer1.Received().OnNext("1");
+            observer1.Received().OnNext("2");
+            
+            observer2.Received(1).OnNext("1");
+            observer2.Received().OnNext("2");
+        }
+        
+        [Test]
+        public void Should_not_deadlock_on_get_during_on_next()
+        {
+            string value = null;
+            
+            observer1
+                .WhenForAnyArgs(o => o.OnNext(default))
+                .Do(_ => value += observable.Get());
+            
+            observable.Subscribe(observer1);
+
+            observable.Next("1");
+
+            value.Should().Be("1");
         }
     }
 }
