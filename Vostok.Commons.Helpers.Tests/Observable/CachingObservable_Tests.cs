@@ -277,7 +277,7 @@ namespace Vostok.Commons.Helpers.Tests.Observable
             
             observable.Next("2");
             
-            observer2.DidNotReceive().OnNext("2");
+            observer1.DidNotReceive().OnNext("2");
         }
         
         [Test]
