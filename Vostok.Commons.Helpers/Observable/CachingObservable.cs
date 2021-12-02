@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
@@ -48,19 +50,25 @@ namespace Vostok.Commons.Helpers.Observable
         /// This collection is readonly and always exists as a single object (tied to this class instance).
         /// So we can use it as "lock" object.
         /// </summary>
-        private readonly List<IObserver<T>> observers = new List<IObserver<T>>();
+        private readonly ConcurrentDictionary<IObserver<T>, Subscription> observers;
 
         [NotNull]
         private volatile State state;
 
         public CachingObservable()
+            : this(new State(default, InitialState, null))
         {
-            state = new State(default, InitialState, null);
         }
 
         public CachingObservable(T initialValue)
+            : this(new State(initialValue, HasValue, null))
         {
-            state = new State(initialValue, HasValue, null);
+        }
+
+        private CachingObservable(State state)
+        {
+            observers = new ConcurrentDictionary<IObserver<T>, Subscription>(ByReferenceEqualityComparer<IObserver<T>>.Instance);
+            this.state = state;
         }
 
         public bool IsCompleted => state.IsCompleted();
@@ -120,7 +128,7 @@ namespace Vostok.Commons.Helpers.Observable
 
                 state = new State(nextValue, cachedState.Flags | HasValue, cachedState.SavedError);
 
-                foreach (var observer in observers)
+                foreach (var observer in observers.Select(p => p.Key))
                     try
                     {
                         observer.OnNext(nextValue);
@@ -146,7 +154,7 @@ namespace Vostok.Commons.Helpers.Observable
 
                 state = new State(cachedState.Value, cachedState.Flags | Completed, error);
 
-                foreach (var observer in observers)
+                foreach (var observer in observers.Select(p => p.Key))
                     try
                     {
                         observer.OnError(error);
@@ -171,7 +179,7 @@ namespace Vostok.Commons.Helpers.Observable
 
                 state = new State(cachedState.Value, cachedState.Flags | Completed, cachedState.SavedError);
 
-                foreach (var observer in observers)
+                foreach (var observer in observers.Select(p => p.Key))
                     try
                     {
                         observer.OnCompleted();
@@ -198,6 +206,9 @@ namespace Vostok.Commons.Helpers.Observable
         {
             lock (observers)
             {
+                if (observers.TryGetValue(observer, out var existing))
+                    return existing;
+
                 var cachedState = state;
 
                 if (cachedState.SavedError != null)
@@ -215,10 +226,10 @@ namespace Vostok.Commons.Helpers.Observable
                     return new EmptyDisposable();
                 }
 
-                observers.Add(observer);
+                var subscription = new Subscription(this, observer);
+                observers.TryAdd(observer, subscription);
+                return subscription;
             }
-
-            return new Subscription(this, observer);
         }
 
         private sealed class State
@@ -258,7 +269,7 @@ namespace Vostok.Commons.Helpers.Observable
             {
                 lock (observable.observers)
                 {
-                    observable.observers.Remove(observer);
+                    observable.observers.TryRemove(observer, out _);
                 }
             }
         }
@@ -272,6 +283,21 @@ namespace Vostok.Commons.Helpers.Observable
             public void Dispose()
             {
             }
+        }
+
+        #endregion
+
+        #region ByReferenceEqualityComparer
+
+        // note (kungurtsev, 02.12.2021): copied from vostok.commons.collections
+        
+        private sealed class ByReferenceEqualityComparer<TT> : IEqualityComparer<TT>
+        {
+            public static readonly ByReferenceEqualityComparer<TT> Instance = new ByReferenceEqualityComparer<TT>();
+
+            public bool Equals(TT x, TT y) => ReferenceEquals(x, y);
+
+            public int GetHashCode(TT obj) => RuntimeHelpers.GetHashCode(obj);
         }
 
         #endregion
