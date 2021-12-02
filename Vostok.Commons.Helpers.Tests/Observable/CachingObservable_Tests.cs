@@ -281,7 +281,7 @@ namespace Vostok.Commons.Helpers.Tests.Observable
         }
         
         [Test]
-        public void Should_not_dead_lock_on_subscribe_during_on_next()
+        public void Should_not_deadlock_on_subscribe_during_on_next()
         {
             observer1
                 .WhenForAnyArgs(o => o.OnNext(default))
@@ -297,6 +297,22 @@ namespace Vostok.Commons.Helpers.Tests.Observable
             
             observer2.Received(1).OnNext("1");
             observer2.Received().OnNext("2");
+        }
+        
+        [Test]
+        public void Should_not_deadlock_on_get_during_on_next()
+        {
+            string value = null;
+            
+            observer1
+                .WhenForAnyArgs(o => o.OnNext(default))
+                .Do(_ => value += observable.Get());
+            
+            observable.Subscribe(observer1);
+
+            observable.Next("1");
+
+            value.Should().Be("1");
         }
     }
 }
