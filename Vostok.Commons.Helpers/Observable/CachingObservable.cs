@@ -128,7 +128,7 @@ namespace Vostok.Commons.Helpers.Observable
 
                 state = new State(nextValue, cachedState.Flags | HasValue, cachedState.SavedError);
 
-                foreach (var observer in observers.Select(p => p.Key))
+                foreach (var observer in observers.Keys)
                     try
                     {
                         observer.OnNext(nextValue);
@@ -154,7 +154,7 @@ namespace Vostok.Commons.Helpers.Observable
 
                 state = new State(cachedState.Value, cachedState.Flags | Completed, error);
 
-                foreach (var observer in observers.Select(p => p.Key))
+                foreach (var observer in observers.Keys)
                     try
                     {
                         observer.OnError(error);
@@ -179,7 +179,7 @@ namespace Vostok.Commons.Helpers.Observable
 
                 state = new State(cachedState.Value, cachedState.Flags | Completed, cachedState.SavedError);
 
-                foreach (var observer in observers.Select(p => p.Key))
+                foreach (var observer in observers.Keys)
                     try
                     {
                         observer.OnCompleted();
