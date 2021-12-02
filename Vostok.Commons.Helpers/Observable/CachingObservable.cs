@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -50,7 +49,7 @@ namespace Vostok.Commons.Helpers.Observable
         /// This collection is readonly and always exists as a single object (tied to this class instance).
         /// So we can use it as "lock" object.
         /// </summary>
-        private readonly ConcurrentDictionary<IObserver<T>, Subscription> observers;
+        private readonly Dictionary<IObserver<T>, Subscription> observers;
 
         [NotNull]
         private volatile State state;
@@ -67,7 +66,7 @@ namespace Vostok.Commons.Helpers.Observable
 
         private CachingObservable(State state)
         {
-            observers = new ConcurrentDictionary<IObserver<T>, Subscription>(ByReferenceEqualityComparer<IObserver<T>>.Instance);
+            observers = new Dictionary<IObserver<T>, Subscription>(ByReferenceEqualityComparer<IObserver<T>>.Instance);
             this.state = state;
         }
 
@@ -122,13 +121,14 @@ namespace Vostok.Commons.Helpers.Observable
             lock (observers)
             {
                 var cachedState = state;
+                var cachedObservers = observers.Keys.ToArray();
 
                 if (cachedState.IsCompleted())
                     return;
 
                 state = new State(nextValue, cachedState.Flags | HasValue, cachedState.SavedError);
 
-                foreach (var observer in observers.Keys)
+                foreach (var observer in cachedObservers)
                     try
                     {
                         observer.OnNext(nextValue);
@@ -148,13 +148,14 @@ namespace Vostok.Commons.Helpers.Observable
             lock (observers)
             {
                 var cachedState = state;
+                var cachedObservers = observers.Keys.ToArray();
 
                 if (cachedState.IsCompleted())
                     return;
 
                 state = new State(cachedState.Value, cachedState.Flags | Completed, error);
 
-                foreach (var observer in observers.Keys)
+                foreach (var observer in cachedObservers)
                     try
                     {
                         observer.OnError(error);
@@ -173,13 +174,14 @@ namespace Vostok.Commons.Helpers.Observable
             lock (observers)
             {
                 var cachedState = state;
+                var cachedObservers = observers.Keys.ToArray();
 
                 if (cachedState.IsCompleted())
                     return;
 
                 state = new State(cachedState.Value, cachedState.Flags | Completed, cachedState.SavedError);
 
-                foreach (var observer in observers.Keys)
+                foreach (var observer in cachedObservers)
                     try
                     {
                         observer.OnCompleted();
@@ -227,7 +229,7 @@ namespace Vostok.Commons.Helpers.Observable
                 }
 
                 var subscription = new Subscription(this, observer);
-                observers.TryAdd(observer, subscription);
+                observers.Add(observer, subscription);
                 return subscription;
             }
         }
@@ -269,7 +271,7 @@ namespace Vostok.Commons.Helpers.Observable
             {
                 lock (observable.observers)
                 {
-                    observable.observers.TryRemove(observer, out _);
+                    observable.observers.Remove(observer);
                 }
             }
         }
@@ -290,7 +292,7 @@ namespace Vostok.Commons.Helpers.Observable
         #region ByReferenceEqualityComparer
 
         // note (kungurtsev, 02.12.2021): copied from vostok.commons.collections
-        
+
         private sealed class ByReferenceEqualityComparer<TT> : IEqualityComparer<TT>
         {
             public static readonly ByReferenceEqualityComparer<TT> Instance = new ByReferenceEqualityComparer<TT>();
