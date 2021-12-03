@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -38,27 +39,24 @@ namespace Vostok.Commons.Helpers.Network
                 if (cacheEntry.validTo < currentTime &&
                     Interlocked.CompareExchange(ref isUpdatingNow, 1, 0) == 0)
                 {
-                    Task.Run(
-                        async () =>
-                        {
-                            try
-                            {
-                                await ResolveAndUpdateCacheAsync(hostname, currentTime).ConfigureAwait(false);
-                            }
-                            finally
-                            {
-                                Interlocked.Exchange(ref isUpdatingNow, 0);
-                            }
-                        });
+                    StartResolveAndUpdateTask(hostname, currentTime);
                 }
 
                 return cacheEntry.addresses;
             }
 
+            return HandleEmptyCache(hostname, currentTime, canWait);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private IPAddress[] HandleEmptyCache(string hostname, DateTime currentTime, bool canWait)
+        {
+            //(deniaa): Do not inline this method because it prevents from creating unnecessary lambda closures
+            // in case item exists in cache.
             var resolveTaskLazy = initialUpdateTasks.GetOrAdd(
                 hostname,
-                _ => new Lazy<Task<IPAddress[]>>(
-                    () => ResolveAndUpdateCacheAsync(hostname, currentTime),
+                s => new Lazy<Task<IPAddress[]>>(
+                    () => ResolveAndUpdateCacheAsync(s, currentTime),
                     LazyThreadSafetyMode.ExecutionAndPublication));
 
             var resolveTask = resolveTaskLazy.Value;
@@ -69,6 +67,25 @@ namespace Vostok.Commons.Helpers.Network
             return resolveTask.Wait(resolveTimeout)
                 ? resolveTask.GetAwaiter().GetResult()
                 : EmptyAddresses;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void StartResolveAndUpdateTask(string hostname, DateTime currentTime)
+        {
+            //(deniaa): Do not inline this method because it prevents from creating unnecessary lambda closures
+            // in case item exists in cache.
+            Task.Run(
+                async () =>
+                {
+                    try
+                    {
+                        await ResolveAndUpdateCacheAsync(hostname, currentTime).ConfigureAwait(false);
+                    }
+                    finally
+                    {
+                        Interlocked.Exchange(ref isUpdatingNow, 0);
+                    }
+                });
         }
 
         [ItemCanBeNull]
