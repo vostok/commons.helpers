@@ -15,6 +15,9 @@ namespace Vostok.Commons.Helpers.Tests.Network
             var host = Dns.GetHostName();
             var resolver = new DnsResolver(TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(1));
             resolver.Resolve(host, true).Should().NotBeEmpty();
+            resolver.Resolve(host, true).Should().NotBeEmpty();
+            resolver.Resolve(host, true).Should().NotBeEmpty();
+            resolver.Resolve(host, true).Should().NotBeEmpty();
         }
     }
 }
