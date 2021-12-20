@@ -7,7 +7,6 @@
 
   <PropertyGroup>
     <Configurations>Debug;Release</Configurations>
-    <LangVersion>7.2</LangVersion>
     <IsPackable>false</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
