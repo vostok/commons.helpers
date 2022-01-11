@@ -35,10 +35,19 @@ namespace Vostok.Commons.Helpers.Topology
 
             LocateHostname(host, out var length);
 
+#if NET6_0_OR_GREATER
+            var hostSpan = host.AsSpan();
+            if (length < host.Length)
+                hostSpan = hostSpan.Slice(0, length);
+
+            return (string.GetHashCode(hostSpan, StringComparison.OrdinalIgnoreCase) * 397) ^ replica.Port;
+#else
+
             if (length < host.Length)
                 host = host.Substring(0, length);
 
             return (StringComparer.OrdinalIgnoreCase.GetHashCode(host) * 397) ^ replica.Port;
+#endif
         }
 
         private static void LocateHostname(string host, out int length)
