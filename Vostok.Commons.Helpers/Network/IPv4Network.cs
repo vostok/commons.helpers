@@ -81,6 +81,9 @@ namespace Vostok.Commons.Helpers.Network
 
         public bool Contains(IPAddress address)
         {
+            if (address.IsIPv4MappedToIPv6)
+                address = address.MapToIPv4();
+
             if (address.AddressFamily != AddressFamily.InterNetwork)
                 return false;
 
