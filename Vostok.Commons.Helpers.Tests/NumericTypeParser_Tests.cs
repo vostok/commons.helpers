@@ -12,6 +12,7 @@ namespace Vostok.Commons.Helpers.Tests
         [TestCase(" -1 000,23 ", -1000.23)]
         [TestCase("5,12e2", 512)]
         [TestCase("512e-2", 5.12)]
+        [TestCase("1", 1)]
         public void Should_parse_double_in_different_formats(string input, double expected)
         {
             NumericTypeParser<double>.TryParse(input, out var result).Should().BeTrue();
