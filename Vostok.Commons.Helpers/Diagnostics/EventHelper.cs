@@ -45,7 +45,7 @@ internal static class EventHelper
     }
 
     /// <summary>
-    /// <para>Get counter <see cref="payload"/> from <see cref="eventData"/>.</para>
+    /// <para>Get counter payload from <see cref="EventWrittenEventArgs">eventData</see>.</para>
     /// <para>Remember counter payload structure looks like a <see cref="IDictionary{TKey,TValue}"/>, but for normal event it is a <see cref="IReadOnlyCollection{T}"/>.</para>
     /// </summary>
     public static bool TryGetCounterPayload([NotNull] EventWrittenEventArgs eventData, out IDictionary<string, object> payload)
@@ -77,7 +77,7 @@ internal static class EventHelper
     }
 
     /// <summary>
-    /// <para>Get event <see cref="payload"/> value by specified index.</para>>
+    /// <para>Get event payload value by specified index.</para>>
     /// </summary>
     public static bool TryGetEventValue([NotNull] EventWrittenEventArgs eventData, int payloadIndex, out object payload)
     {
