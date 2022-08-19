@@ -48,7 +48,7 @@ internal static class EventHelper
     /// <para>Get counter <see cref="payload"/> from <see cref="eventData"/>.</para>
     /// <para>Remember counter payload structure looks like a <see cref="IDictionary{TKey,TValue}"/>, but for normal event it is a <see cref="IReadOnlyCollection{T}"/>.</para>
     /// </summary>
-    public static bool TryGetCounterPayload([NotNull] EventWrittenEventArgs eventData, [CanBeNull] out IDictionary<string, object> payload)
+    public static bool TryGetCounterPayload([NotNull] EventWrittenEventArgs eventData, out IDictionary<string, object> payload)
     {
         // NOTE: See https://github.com/dotnet/runtime/blob/main/docs/design/features/event-counter.md#api-design for examples payload structures.
 
@@ -79,7 +79,7 @@ internal static class EventHelper
     /// <summary>
     /// <para>Get event <see cref="payload"/> value by specified index.</para>>
     /// </summary>
-    public static bool TryGetEventValue([NotNull] EventWrittenEventArgs eventData, int payloadIndex, [CanBeNull] out object payload)
+    public static bool TryGetEventValue([NotNull] EventWrittenEventArgs eventData, int payloadIndex, out object payload)
     {
         payload = default;
 
