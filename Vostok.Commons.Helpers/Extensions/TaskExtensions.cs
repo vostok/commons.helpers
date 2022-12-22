@@ -14,12 +14,30 @@ namespace Vostok.Commons.Helpers.Extensions
         /// <para>Returns true if <paramref name="task"/> finished within given <paramref name="timeout"/>.</para>
         /// <para>Does not stop or cancel given <paramref name="task"/></para>
         /// </summary>
-        public static async Task<bool> TryWaitAsync(this Task task, TimeSpan timeout)
+        public static Task<bool> TryWaitAsync(this Task task, TimeSpan timeout) =>
+            TryWaitAsync(task, timeout, CancellationToken.None);
+
+        /// <summary>
+        /// <para>Returns true if <paramref name="task"/> finished before given <paramref name="cancellationToken"/>.</para>
+        /// <para>Does not stop or cancel given <paramref name="task"/></para>
+        /// </summary>
+        public static Task<bool> TryWaitAsync(this Task task, CancellationToken cancellationToken) =>
+            TryWaitAsync(task, Timeout.InfiniteTimeSpan, cancellationToken);
+
+        /// <summary>
+        /// <para>Returns true if <paramref name="task"/> finished within given <paramref name="timeout"/> and before given <paramref name="cancellationToken"/>.</para>
+        /// <para>Does not stop or cancel given <paramref name="task"/></para>
+        /// </summary>
+        public static async Task<bool> TryWaitAsync(this Task task, TimeSpan timeout, CancellationToken cancellationToken)
         {
             if (task.IsCompleted)
                 return true;
+            if (cancellationToken.IsCancellationRequested)
+                return false;
 
-            using (var cts = new CancellationTokenSource())
+            using (var cts = cancellationToken == CancellationToken.None
+                       ? new CancellationTokenSource()
+                       : CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
             {
                 var delay = Task.Delay(timeout, cts.Token);
 
