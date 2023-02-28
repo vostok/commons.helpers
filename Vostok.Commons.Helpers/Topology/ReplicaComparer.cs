@@ -26,7 +26,9 @@ namespace Vostok.Commons.Helpers.Topology
             LocateHostname(host1, out var length1);
             LocateHostname(host2, out var length2);
 
-            return length1 == length2 && string.Compare(host1, 0, host2, 0, length1, StringComparison.OrdinalIgnoreCase) == 0;
+            return length1 == length2
+                   && string.Compare(host1, 0, host2, 0, length1, StringComparison.OrdinalIgnoreCase) == 0
+                   && string.Compare(r1.AbsolutePath, r2.AbsolutePath, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         public int GetHashCode(Uri replica)
@@ -40,13 +42,16 @@ namespace Vostok.Commons.Helpers.Topology
             if (length < host.Length)
                 hostSpan = hostSpan.Slice(0, length);
 
-            return (string.GetHashCode(hostSpan, StringComparison.OrdinalIgnoreCase) * 397) ^ replica.Port;
+            return (string.GetHashCode(hostSpan, StringComparison.OrdinalIgnoreCase) * 397)
+                   ^ (string.GetHashCode(replica.AbsolutePath, StringComparison.OrdinalIgnoreCase) * 397)
+                   ^ replica.Port;
 #else
-
             if (length < host.Length)
                 host = host.Substring(0, length);
 
-            return (StringComparer.OrdinalIgnoreCase.GetHashCode(host) * 397) ^ replica.Port;
+            return (StringComparer.OrdinalIgnoreCase.GetHashCode(host) * 397)
+                   ^ (StringComparer.OrdinalIgnoreCase.GetHashCode(replica.AbsolutePath) * 397)
+                   ^ replica.Port;
 #endif
         }
 
