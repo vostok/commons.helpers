@@ -25,6 +25,10 @@ namespace Vostok.Commons.Helpers.Tests.Topology
             => ShouldBeEqual("http://replica.domain1/", "http://replica.domain2.com/");
 
         [Test]
+        public void Should_ignore_domain_names_for_hostnames_starting_with_digit() 
+            => ShouldBeEqual("http://1replica.domain1/", "http://1replica.domain2/");
+
+        [Test]
         public void Should_differentiate_replicas_by_host_name()
         {
             ShouldBeDifferent("http://replica", "http://rep");
