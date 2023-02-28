@@ -9,12 +9,12 @@ namespace Vostok.Commons.Helpers.Tests.Topology
     internal class ReplicaComparer_Tests
     {
         [Test]
-        public void Should_not_compare_paths()
-            => ShouldBeEqual("http://replica/foo", "http://replica/bar");
+        public void Should_compare_paths()
+            => ShouldBeDifferent("http://replica/foo", "http://replica/bar");
 
         [Test]
         public void Should_not_compare_query_parameters()
-            => ShouldBeEqual("http://replica/foo?a=b", "http://replica/bar?c=d");
+            => ShouldBeEqual("http://replica?a=b", "http://replica?c=d");
 
         [Test]
         public void Should_be_case_insensitive()
