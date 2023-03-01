@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Topology
@@ -67,7 +66,7 @@ namespace Vostok.Commons.Helpers.Topology
             if (dotIndex < 0)
                 return;
 
-            if (IPAddress.TryParse(host, out _))
+            if (IpAddressDefiner.IsIpAddress(host))
                 return;
 
             length = dotIndex;
