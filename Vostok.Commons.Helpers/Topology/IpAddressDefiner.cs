@@ -4,17 +4,17 @@ namespace Vostok.Commons.Helpers.Topology
     {
         public static bool IsIpAddress(string host)
         {
-            // note (lunev.d, 01.03.2023): We don't support port specification at the end of address
-            // and so we can consider that if an address contains colon - it's an IPv6 address
-            if (host.Contains(":"))
-                return true;
-            
             var numParts = 0;
             var currentOctetValue = 0;
             var hasAtLeastOneDigitInOctet = false;
 
             foreach (var c in host)
             {
+                // note (lunev.d, 01.03.2023): We don't support port specification at the end of address
+                // and so we can consider that if an address contains colon - it's an IPv6 address
+                if (c == ':')
+                    return true;
+
                 if (c == '.')
                 {
                     if (numParts >= 3 || !hasAtLeastOneDigitInOctet)
