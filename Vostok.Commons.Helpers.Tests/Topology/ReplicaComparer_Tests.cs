@@ -43,9 +43,18 @@ namespace Vostok.Commons.Helpers.Tests.Topology
         public void Should_recognize_equal_ip_addresses()
             => ShouldBeEqual("http://1.2.3.4/", "http://1.2.3.4/");
 
-        [Test]
-        public void Should_recognize_different_ip_addresses()
-            => ShouldBeDifferent("http://1.2.3.4/", "http://1.2.5.4/");
+        [TestCase("1234.0.0.1")]
+        [TestCase("256.0.0.1")]
+        [TestCase("1a.2b.3c.1")]
+        public void Should_recognize_incorrect_ip_addresses(string address) 
+            => ShouldBeEqual($"http://{address}/", $"http://{address + "0"}/");
+
+        [TestCase("1")]
+        [TestCase("1.2")]
+        [TestCase("1.2.3")]
+        [TestCase("127.0.255.25")]
+        public void Should_recognize_correct_ip_addresses(string address) 
+            => ShouldBeDifferent($"http://{address}/", $"http://{address + "0"}");
 
         private static void ShouldBeEqual(string replica1, string replica2)
         {
