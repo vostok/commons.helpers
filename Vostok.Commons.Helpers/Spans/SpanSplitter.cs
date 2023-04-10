@@ -1,8 +1,6 @@
-﻿#if NETCOREAPP3_1_OR_GREATER
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System;
 using JetBrains.Annotations;
-#endif
 
 namespace Vostok.Commons.Helpers.Spans;
 

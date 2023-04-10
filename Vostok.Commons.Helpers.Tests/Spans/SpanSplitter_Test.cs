@@ -1,8 +1,8 @@
-﻿#if NET6_0_OR_GREATER
-using System;
+﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
+#if NETCOREAPP3_1_OR_GREATER
 using Vostok.Commons.Helpers.Spans;
 
 namespace Vostok.Commons.Helpers.Tests.Spans;
