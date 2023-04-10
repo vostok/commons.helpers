@@ -1,8 +1,8 @@
 ﻿#if NETCOREAPP3_1_OR_GREATER
-using NUnit.Framework;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
+using NUnit.Framework;
 using Vostok.Commons.Helpers.Spans;
 
 namespace Vostok.Commons.Helpers.Tests.Spans;
@@ -18,7 +18,6 @@ public class SpanSplitter_Test
         Check("a b", "XYZ", o);
     }
 
-    
     [Test]
     public void Test_EmptySeparatorList([Values(true, false)] bool removeEmpty)
     {
@@ -72,15 +71,13 @@ public class SpanSplitter_Test
         Check("ab  ", " ", o);
     }
 
-
     private void Check(string src, string delims, bool removeEmptyEntries)
     {
         var list = new List<string>();
         foreach (var span in src.AsSpan().Split(delims.AsSpan(), removeEmptyEntries)) list.Add(span.ToString());
 
-
-        var expected = src.Split(delims.ToCharArray(),
-            removeEmptyEntries ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None);
+        var splitOptions = removeEmptyEntries ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None;
+        var expected = src.Split(delims.ToCharArray(), splitOptions);
         list.Should().BeEquivalentTo(expected, o => o.WithStrictOrdering());
     }
 }
