@@ -1,13 +1,10 @@
-﻿
-using JetBrains.Annotations;
-#if NETCOREAPP3_1_OR_GREATER
+﻿#if NETCOREAPP3_1_OR_GREATER
 using System.Runtime.CompilerServices;
 using System;
-#endif
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Spans;
 
-#if NETCOREAPP3_1_OR_GREATER
 [PublicAPI]
 internal static class SpanSplitter
 {
@@ -19,7 +16,9 @@ internal static class SpanSplitter
     /// <param name="separators">each char is independent separator!</param>
     /// <param name="removeEmptyEntries">true to skip zero-length results</param>
     /// <returns></returns>
-    public static Enumerable Split(this ReadOnlySpan<char> source, ReadOnlySpan<char> separators,
+    public static Enumerable Split(
+        this ReadOnlySpan<char> source,
+        ReadOnlySpan<char> separators,
         bool removeEmptyEntries = false)
     {
         return new Enumerable(source, separators, removeEmptyEntries);
@@ -52,7 +51,6 @@ internal static class SpanSplitter
         private int firstChar;
         private int state;
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal Enumerator(ReadOnlySpan<char> source, ReadOnlySpan<char> separators, bool removeEmptyEntries)
         {
@@ -65,6 +63,8 @@ internal static class SpanSplitter
             Current = ReadOnlySpan<char>.Empty;
         }
 
+        public ReadOnlySpan<char> Current { get; private set; }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool MoveNext()
         {
@@ -73,7 +73,6 @@ internal static class SpanSplitter
                 var charIsSeparator = separators.Contains(source[index]);
                 if (TryProcessChar(charIsSeparator))
                     return true;
-                index++;
             }
 
             if (TryProcessChar(true))
@@ -90,6 +89,7 @@ internal static class SpanSplitter
         [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
         private bool TryProcessChar(bool charIsSeparator)
         {
+            var result = false;
             switch (state)
             {
                 case 0: //char
@@ -99,8 +99,7 @@ internal static class SpanSplitter
                         if (index > firstChar || !removeEmptyEntries)
                         {
                             Current = source.Slice(firstChar, index - firstChar);
-                            index++;
-                            return true;
+                            result = true;
                         }
                     }
 
@@ -115,19 +114,18 @@ internal static class SpanSplitter
 
                     if (!removeEmptyEntries)
                     {
-                        index++;
                         Current = Span<char>.Empty;
-                        return true;
+                        result = true;
                     }
 
                     break;
+                case 2:
+                    return false;
             }
 
-            return false;
+            index++;
+            return result;
         }
-
-
-        public ReadOnlySpan<char> Current { get; private set; }
     }
 }
 
