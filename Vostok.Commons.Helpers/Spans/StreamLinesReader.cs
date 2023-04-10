@@ -1,10 +1,10 @@
-﻿#if NETCOREAPP3_1_OR_GREATER
-using System;
+﻿using System;
+#if NETCOREAPP3_1_OR_GREATER
 using System.Buffers;
-using System.IO;
 using System.Text.Unicode;
-using JetBrains.Annotations;
 #endif
+using System.IO;
+using JetBrains.Annotations;
 
 namespace Vostok.Commons.Helpers.Spans;
 
