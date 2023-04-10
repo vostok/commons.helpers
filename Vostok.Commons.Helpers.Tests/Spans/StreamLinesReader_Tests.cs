@@ -22,19 +22,19 @@ public class StreamLinesReader_Tests
     {
         var src1 = CreateContent("abc" + B + "z");
 
-        var br = new StreamLinesReader(src1, 4, 4);
-        br.TryReadLine(out _).Should().Be(true);
+        var linesReader = new StreamLinesReader(src1, 4, 4);
+        linesReader.TryReadLine(out _).Should().Be(true);
 
         src1.Position.Should().Be(4);
 
-        br.ResetToZero();
+        linesReader.ResetToZero();
 
-        br.TryReadLine(out var sp).Should().Be(true);
-        sp.ToString().Should().Be("abc");
+        linesReader.TryReadLine(out var span).Should().Be(true);
+        span.ToString().Should().Be("abc");
         src1.Position.Should().Be(4);
 
-        br.TryReadLine(out sp).Should().Be(true);
-        sp.ToString().Should().Be("z");
+        linesReader.TryReadLine(out span).Should().Be(true);
+        span.ToString().Should().Be("z");
         src1.Position.Should().Be(6);
     }
 
@@ -182,23 +182,10 @@ public class StreamLinesReader_Tests
         Check("abcdefghik" + B, bb, cb);
     }
 
-    private List<string> ReadAll(StreamLinesReader br)
-    {
-        var actual = new List<string>();
-
-        while (br.TryReadLine(out var lineSpan))
-        {
-            actual.Add(lineSpan.ToString());
-        }
-
-        return actual;
-    }
-
-    private void Check(string s, int byteBufferSize = 10, int charsBufferSize = 10,
-        int[] charBufSizesEachStep = null)
+    private void Check(string s, int byteBufferSize = 10, int charsBufferSize = 10, int[] charBufSizesEachStep = null)
     {
         var src1 = CreateContent(s);
-        var br = new StreamLinesReader(src1, byteBufferSize, charsBufferSize);
+        var linesReader = new StreamLinesReader(src1, byteBufferSize, charsBufferSize);
         var referenceReader = new StringReader(s);
 
         var expected = new List<string>();
@@ -215,11 +202,11 @@ public class StreamLinesReader_Tests
         var actual = new List<string>();
 
         var i = 0;
-        while (br.TryReadLine(out var lineSpan))
+        while (linesReader.TryReadLine(out var lineSpan))
         {
             actual.Add(lineSpan.ToString());
             if (charBufSizesEachStep != null)
-                br.CharBufferSize.Should().Be(charBufSizesEachStep[i], $"string index={i}, s={actual.Last()}");
+                linesReader.CharBufferSize.Should().Be(charBufSizesEachStep[i], $"string index={i}, s={actual.Last()}");
             i++;
         }
 
