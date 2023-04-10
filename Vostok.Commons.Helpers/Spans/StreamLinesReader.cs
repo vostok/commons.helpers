@@ -4,9 +4,11 @@ using System.Buffers;
 using System.IO;
 using System.Text.Unicode;
 using JetBrains.Annotations;
+#endif
 
 namespace Vostok.Commons.Helpers.Spans;
 
+#if NETCOREAPP3_1_OR_GREATER
 /// <summary>
 /// string reader with zero garbage
 /// TryReadLine call invalidates content of previously returned lines (ReadOnlySpan's)!!

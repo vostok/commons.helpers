@@ -2,9 +2,11 @@
 using System.Runtime.CompilerServices;
 using System;
 using JetBrains.Annotations;
+#endif
 
 namespace Vostok.Commons.Helpers.Spans;
 
+#if NETCOREAPP3_1_OR_GREATER
 [PublicAPI]
 internal static class SpanSplitter
 {
