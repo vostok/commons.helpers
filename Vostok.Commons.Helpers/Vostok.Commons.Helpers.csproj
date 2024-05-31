@@ -26,5 +26,9 @@
     <PackageTags>vostok vostok.commons</PackageTags>
     <RepositoryUrl>https://github.com/vostok/commons.helpers</RepositoryUrl>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\vostok.commons.time\Vostok.Commons.Time\FastDateTime.cs" LinkBase="Commons\" />
+  </ItemGroup>
 
 </Project>

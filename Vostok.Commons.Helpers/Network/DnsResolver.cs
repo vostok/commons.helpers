@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Vostok.Commons.Time;
 
 namespace Vostok.Commons.Helpers.Network
 {
@@ -32,7 +33,7 @@ namespace Vostok.Commons.Helpers.Network
 
         public IPAddress[] Resolve(string hostname, bool canWait)
         {
-            var currentTime = DateTime.UtcNow;
+            var currentTime = FastDateTime.UtcNow;
 
             if (cache.TryGetValue(hostname, out var cacheEntry))
             {
