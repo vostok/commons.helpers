@@ -4,7 +4,7 @@ src:
     configuration: None
     
   deps:
-    - vostok.commons.time@fast-date-time
+    - vostok.commons.time/src@fast-date-time
 
 notests *default:
   build:
@@ -18,7 +18,7 @@ notests *default:
 
   deps:
     - vostok.devtools
-    - vostok.commons.time@fast-date-time
+    - vostok.commons.time/src@fast-date-time
 
 full-build > notests:
   build:
