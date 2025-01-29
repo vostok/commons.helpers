@@ -12,6 +12,16 @@ notests *default:
 
   install:
     - Vostok.Commons.Helpers/bin/Release/netstandard2.0/Vostok.Commons.Helpers.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Commons.Helpers/bin/Release/netstandard2.0/Vostok.Commons.Helpers.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Commons.Helpers/bin/Release/net6.0/Vostok.Commons.Helpers.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Commons.Helpers/bin/Release/net8.0/Vostok.Commons.Helpers.dll
 
   deps:
     - vostok.devtools
@@ -20,6 +30,21 @@ full-build > notests:
   build:
     target: Vostok.Commons.Helpers.sln
     configuration: Release
+    tool:
+      name: dotnet
+
+  install:
+    - Vostok.Commons.Helpers/bin/Release/netstandard2.0/Vostok.Commons.Helpers.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Commons.Helpers/bin/Release/netstandard2.0/Vostok.Commons.Helpers.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Commons.Helpers/bin/Release/net6.0/Vostok.Commons.Helpers.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Commons.Helpers/bin/Release/net8.0/Vostok.Commons.Helpers.dll
 
   deps:
     - -vostok.devtools
