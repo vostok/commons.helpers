@@ -11,11 +11,16 @@ namespace Vostok.Commons.Helpers.Url
 
         public static string ToStringWithoutQuery(string urlString)
         {
-            var queryBeginning = urlString.IndexOf("?", StringComparison.Ordinal);
+            var queryBeginning = IndexOfQuery(urlString);
             if (queryBeginning >= 0)
                 urlString = urlString.Substring(0, queryBeginning);
 
             return urlString;
+        }
+
+        public static int IndexOfQuery(string urlString)
+        {
+            return urlString.IndexOf("?", StringComparison.Ordinal);
         }
     }
 }

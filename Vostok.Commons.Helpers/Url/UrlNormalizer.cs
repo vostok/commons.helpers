@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -38,15 +39,23 @@ namespace Vostok.Commons.Helpers.Url
 
         public static string NormalizePath(Uri url, int maxLength = DefaultLengthLimit)
         {
-            return NormalizePath(url.IsAbsoluteUri ? url.AbsolutePath : url.ToStringWithoutQuery(), maxLength);
+            var str = url.IsAbsoluteUri ? url.AbsolutePath : url.ToStringWithoutQuery();
+            return NormalizePath(str, 0, str.Length,  maxLength);
         }
 
         public static string NormalizePath(string path, int maxLength = DefaultLengthLimit)
         {
+            return NormalizePath(path, 0, path.Length, maxLength);
+        }
+
+        public static string NormalizePath(string path, int offset, int stringLength, int maxLength = DefaultLengthLimit)
+        {
             var builder = ObtainBuilder();
 
-            foreach (var segment in EnumerateSegments(path))
+            var enumerator = new SegmentEnumerator(path, offset, stringLength);
+            while (enumerator.MoveNext())
             {
+                var segment = enumerator.Current;
                 if (RequiresSubstitution(segment))
                 {
                     builder.Append(Tilde);
@@ -79,30 +88,6 @@ namespace Vostok.Commons.Helpers.Url
             builder.Clear();
 
             return builder;
-        }
-
-        private static IEnumerable<Segment> EnumerateSegments(string path)
-        {
-            var segmentBeginning = 0;
-
-            for (var i = 0; i < path.Length; i++)
-            {
-                var current = path[i];
-                if (current == Slash)
-                {
-                    if (i > segmentBeginning)
-                    {
-                        yield return new Segment(path, segmentBeginning, i - segmentBeginning);
-                    }
-
-                    segmentBeginning = i + 1;
-                }
-            }
-
-            if (segmentBeginning < path.Length)
-            {
-                yield return new Segment(path, segmentBeginning, path.Length - segmentBeginning);
-            }
         }
 
         private static bool RequiresSubstitution(Segment segment)
@@ -165,10 +150,73 @@ namespace Vostok.Commons.Helpers.Url
         {
             return c < 128 && AllowedCharactersMap[c];
         }
+        
+        private struct SegmentEnumerator : IEnumerator<Segment>
+        {
+            private readonly string path;
+            private int index;
+            private int segmentBeginning;
+            private int from;
+            private int stringLength;
+
+            public SegmentEnumerator(string path, int offset, int stringLength)
+            {
+                this.path = path;
+                this.index = offset;
+                this.stringLength = stringLength;
+                segmentBeginning = 0;
+                from = 0;
+            }
+
+            public bool MoveNext()
+            { 
+                if (string.IsNullOrEmpty(path) || index == stringLength)
+                    return false;
+                
+                for (; index < stringLength; index++)
+                {
+                    var current = path[index];
+                    if (current == Slash)
+                    {
+                        if (index > segmentBeginning)
+                        {
+                            from = segmentBeginning;
+                            segmentBeginning = index + 1;
+
+                            return true;
+                        }
+
+                        segmentBeginning = index + 1;
+                    }
+                }
+
+                if (segmentBeginning < stringLength)
+                {
+                    from = segmentBeginning;
+                    return true;
+                }
+
+                return false;
+            }
+
+            public void Reset()
+            {
+                index = 0;
+                segmentBeginning = 0;
+            }
+
+            object IEnumerator.Current => Current;
+
+            public Segment Current { get => new Segment(path, from, index - from); } 
+
+            public void Dispose()
+            {
+            }
+        }
 
         #region LongSegmentsDetector
 
-        private class LongSegmentsDetector : IDetector
+        private sealed class LongSegmentsDetector : IDetector
         {
             private const int LengthThreshold = 40;
 
@@ -182,7 +230,7 @@ namespace Vostok.Commons.Helpers.Url
 
         #region ExoticCharactersDetector
 
-        private class ExoticCharactersDetector : IDetector
+        private sealed class ExoticCharactersDetector : IDetector
         {
             public bool IsLikelyUnique(Segment segment)
             {
@@ -200,7 +248,7 @@ namespace Vostok.Commons.Helpers.Url
 
         #region HexSequencesDetector
 
-        private class HexSequencesDetector : IDetector
+        private sealed class HexSequencesDetector : IDetector
         {
             private const int MinimumSequenceLength = 8;
 
@@ -229,7 +277,7 @@ namespace Vostok.Commons.Helpers.Url
 
         #region NumericSegmentsDetector
 
-        private class NumericSegmentsDetector : IDetector
+        private sealed class NumericSegmentsDetector : IDetector
         {
             public bool IsLikelyUnique(Segment segment)
             {
