@@ -30,7 +30,7 @@ namespace Vostok.Commons.Helpers.Tests.Url
         [TestCase("authorizator/v1.1/1$d46563a5-cf90-4995-8f9e-388659477642/permissions", "authorizator/v1.1/~/permissions")]
         [TestCase("/v1/contents/srv/dd-tmp/nsid/public/pf8/4636/pv_e6eb854f-59d1-48f1-918e-2ba09e424761.ab4208a9-6237-47e9-a807-258f469ab33a.636558468599688976_.content", "v1/contents/srv/dd-tmp/nsid/public/pf8/~/~")]
         [TestCase("/regusers-sql-sm/reg_regusers/d86f85cc-e281-464c-874b-b95865dbb189;2bb7f717-21c3-4433-8411-e299df188d47;382e4ccf-f553-453e-84c7-55d1b4b04107", "regusers-sql-sm/reg_regusers/~")]
-        [TestCase("//foo//bar//baz//", "foo/bar/baz")]
+        [TestCase("//foo///////bar//baz//", "foo/bar/baz")]
         [TestCase("FOO/BAR/BaZ", "foo/bar/baz")]
         [TestCase("foo/abcdefghikabcdefghikabcdefghikabcdefghikabcdefghikabcdefghikz/baz", "foo/~/baz")]
         [TestCase("foo/hex_0xa0b4f85d_hex/baz", "foo/~/baz")]
@@ -63,6 +63,22 @@ namespace Vostok.Commons.Helpers.Tests.Url
         public void Should_correctly_truncate_if_max_length_is_less_than_truncation_text()
         {
             UrlNormalizer.NormalizePath("foo/bar/baz", 3).Should().Be("...(truncated)");
+        }
+
+        [TestCase("foo/bar/baz", 0, 1, "f")]
+        [TestCase("foo/bar/baz", 0, 3, "foo")]
+        [TestCase("foo/bar/baz", 0, 4, "foo")]
+        [TestCase("foo/bar/baz", 0, 5, "foo/b")]
+        [TestCase("foo/bar/baz", 2, 1, "o")]
+        [TestCase("foo/bar/baz", 2, 2, "o")]
+        [TestCase("foo/bar/baz", 2, 3, "o/b")]
+        [TestCase("foo/////bar/baz", 2, 3, "o")]
+        [TestCase("foo/bar/baz", 3, 1, "/")]
+        [TestCase("foo/bar/baz", 3, 2, "b")]
+        [TestCase("foo/bar/baz", 3, 5, "bar")]
+        public void Should_correctly_Normalize_in_segment(string path, int offset, int length, string expected)
+        {
+            UrlNormalizer.NormalizePath(path, offset, length).Should().Be(expected);
         }
     }
 }
