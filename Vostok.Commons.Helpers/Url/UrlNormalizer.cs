@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,14 +19,7 @@ namespace Vostok.Commons.Helpers.Url
 
         private static readonly bool[] HexCharactersMap;
         private static readonly bool[] AllowedCharactersMap;
-
-        private static readonly IDetector[] Detectors =
-        {
-            new LongSegmentsDetector(),
-            new ExoticCharactersDetector(),
-            new HexSequencesDetector(),
-            new NumericSegmentsDetector()
-        };
+        
 
         [ThreadStatic]
         private static StringBuilder resultBuilder;
@@ -95,11 +87,39 @@ namespace Vostok.Commons.Helpers.Url
             if (segment.IsEmpty)
                 return false;
 
-            for (var i = 0; i < Detectors.Length; i++)
+            if (segment.Length >= 40)
+                return true;
+
+            var hexRun = 0;
+            var sawDigit = false;
+            var dashOrDigitOnly = true;
+
+            for (var i = 0; i < segment.Length; i++)
             {
-                if (Detectors[i].IsLikelyUnique(segment))
+                var c = segment[i];
+
+                if (!IsAllowedCharacter(c))
                     return true;
+
+                if (IsHexCharacter(c))
+                {
+                    if (++hexRun >= 8)
+                        return true;
+                }
+                else
+                {
+                    hexRun = 0;
+                }
+
+                var isDigit = (c >= '0' && c <= '9');
+                var isDash  = (c == Dash);
+                if (!isDigit && !isDash)
+                    dashOrDigitOnly = false;
+                sawDigit |= isDigit;
             }
+
+            if (dashOrDigitOnly && sawDigit)
+                return true;
 
             return false;
         }
@@ -151,155 +171,36 @@ namespace Vostok.Commons.Helpers.Url
             return c < 128 && AllowedCharactersMap[c];
         }
         
-        private struct SegmentEnumerator : IEnumerator<Segment>
+        private ref struct SegmentEnumerator
         {
-            private readonly string path;
-            private int index;
-            private int segmentBeginning;
-            private int from;
-            private int stringLength;
+            private readonly string source;
+            private int pos;
+            private int segmentStart;
+            private readonly int maxOffset;
 
-            public SegmentEnumerator(string path, int offset, int stringLength)
+            public SegmentEnumerator(string source, int offset, int segmentLength)
             {
-                this.path = path;
-                this.index = offset;
-                this.stringLength = stringLength;
-                segmentBeginning = 0;
-                from = 0;
+                this.source = source;
+                pos = offset;
+                segmentStart = offset;
+                maxOffset = offset + segmentLength;
             }
 
             public bool MoveNext()
-            { 
-                if (string.IsNullOrEmpty(path) || index == stringLength)
-                    return false;
-                
-                for (; index < stringLength; index++)
-                {
-                    var current = path[index];
-                    if (current == Slash)
-                    {
-                        if (index > segmentBeginning)
-                        {
-                            from = segmentBeginning;
-                            segmentBeginning = index + 1;
-
-                            return true;
-                        }
-
-                        segmentBeginning = index + 1;
-                    }
-                }
-
-                if (segmentBeginning < stringLength)
-                {
-                    from = segmentBeginning;
-                    return true;
-                }
-
-                return false;
-            }
-
-            public void Reset()
             {
-                index = 0;
-                segmentBeginning = 0;
+                while (pos < maxOffset && source[pos] == Slash)
+                    pos++;
+
+                segmentStart = pos;
+
+                while (pos < maxOffset && source[pos] != Slash)
+                    pos++;
+
+                return segmentStart < maxOffset;
             }
 
-            object IEnumerator.Current => Current;
-
-            public Segment Current { get => new Segment(path, from, index - from); } 
-
-            public void Dispose()
-            {
-            }
+            public Segment Current => new Segment(source, segmentStart, pos - segmentStart);
         }
-
-        #region LongSegmentsDetector
-
-        private sealed class LongSegmentsDetector : IDetector
-        {
-            private const int LengthThreshold = 40;
-
-            public bool IsLikelyUnique(Segment segment)
-            {
-                return segment.Length >= LengthThreshold;
-            }
-        }
-
-        #endregion
-
-        #region ExoticCharactersDetector
-
-        private sealed class ExoticCharactersDetector : IDetector
-        {
-            public bool IsLikelyUnique(Segment segment)
-            {
-                for (var i = 0; i < segment.Length; i++)
-                {
-                    if (!IsAllowedCharacter(segment[i]))
-                        return true;
-                }
-
-                return false;
-            }
-        }
-
-        #endregion
-
-        #region HexSequencesDetector
-
-        private sealed class HexSequencesDetector : IDetector
-        {
-            private const int MinimumSequenceLength = 8;
-
-            public bool IsLikelyUnique(Segment segment)
-            {
-                var consecutiveHexChars = 0;
-
-                for (var i = 0; i < segment.Length; i++)
-                {
-                    if (IsHexCharacter(segment[i]))
-                    {
-                        if (++consecutiveHexChars == MinimumSequenceLength)
-                            return true;
-                    }
-                    else
-                    {
-                        consecutiveHexChars = 0;
-                    }
-                }
-
-                return false;
-            }
-        }
-
-        #endregion
-
-        #region NumericSegmentsDetector
-
-        private sealed class NumericSegmentsDetector : IDetector
-        {
-            public bool IsLikelyUnique(Segment segment)
-            {
-                var sawDigits = false;
-
-                for (var i = 0; i < segment.Length; i++)
-                {
-                    var current = segment[i];
-                    var isDigit = current >= '0' && current <= '9';
-                    var isDash = current == Dash;
-
-                    if (!isDash && !isDigit)
-                        return false;
-
-                    sawDigits |= isDigit;
-                }
-
-                return sawDigits;
-            }
-        }
-
-        #endregion
 
         #region Segment
 
@@ -320,15 +221,6 @@ namespace Vostok.Commons.Helpers.Url
             public bool IsEmpty => Length == 0;
 
             public char this[int index] => Path[Offset + index];
-        }
-
-        #endregion
-
-        #region IDetector
-
-        private interface IDetector
-        {
-            bool IsLikelyUnique(Segment segment);
         }
 
         #endregion
