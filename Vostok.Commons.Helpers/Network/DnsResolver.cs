@@ -121,7 +121,9 @@ namespace Vostok.Commons.Helpers.Network
         private static long GetTimestamp()
         {
 #if NET6_0_OR_GREATER
-            return Environment.TickCount64;
+            // ReSharper disable once RedundantNameQualifier
+            // (deniaa): Other modules reference this file as a source and this lead to ambiguous invocation between System.Environment and Vostok.Environment.
+            return System.Environment.TickCount64;
 #else
             return Stopwatch.GetTimestamp();
 #endif
