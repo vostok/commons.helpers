@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+#if! NET6_0_OR_GREATER
+using System.Diagnostics;
+#endif
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -14,9 +17,10 @@ namespace Vostok.Commons.Helpers.Network
         private static readonly IPAddress[] EmptyAddresses = {};
 
         private readonly TimeSpan cacheTtl;
+        private readonly long cacheTtlTimestampTicks;
         private readonly TimeSpan resolveTimeout;
 
-        private readonly ConcurrentDictionary<string, (IPAddress[] addresses, DateTime validTo)> cache;
+        private readonly ConcurrentDictionary<string, (IPAddress[] addresses, long validTo)> cache;
         private readonly ConcurrentDictionary<string, Lazy<Task<IPAddress[]>>> initialUpdateTasks;
 
         private int isUpdatingNow;
@@ -24,15 +28,16 @@ namespace Vostok.Commons.Helpers.Network
         public DnsResolver(TimeSpan cacheTtl, TimeSpan resolveTimeout)
         {
             this.cacheTtl = cacheTtl;
+            cacheTtlTimestampTicks = ConvertToTimestampTicks(cacheTtl);
             this.resolveTimeout = resolveTimeout;
 
-            cache = new ConcurrentDictionary<string, (IPAddress[] addresses, DateTime validTo)>(StringComparer.OrdinalIgnoreCase);
+            cache = new ConcurrentDictionary<string, (IPAddress[] addresses, long validTo)>(StringComparer.OrdinalIgnoreCase);
             initialUpdateTasks = new ConcurrentDictionary<string, Lazy<Task<IPAddress[]>>>(StringComparer.OrdinalIgnoreCase);
         }
 
         public IPAddress[] Resolve(string hostname, bool canWait)
         {
-            var currentTime = DateTime.UtcNow;
+            var currentTime = GetTimestamp();
 
             if (cache.TryGetValue(hostname, out var cacheEntry))
             {
@@ -49,7 +54,7 @@ namespace Vostok.Commons.Helpers.Network
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private IPAddress[] HandleEmptyCache(string hostname, DateTime currentTime, bool canWait)
+        private IPAddress[] HandleEmptyCache(string hostname, long currentTime, bool canWait)
         {
             //(deniaa): Do not inline this method because it prevents from creating unnecessary lambda closures
             // in case item exists in cache.
@@ -70,7 +75,7 @@ namespace Vostok.Commons.Helpers.Network
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private void StartResolveAndUpdateTask(string hostname, DateTime currentTime)
+        private void StartResolveAndUpdateTask(string hostname, long currentTime)
         {
             //(deniaa): Do not inline this method because it prevents from creating unnecessary lambda closures
             // in case item exists in cache.
@@ -101,13 +106,34 @@ namespace Vostok.Commons.Helpers.Network
             }
         }
 
-        private async Task<IPAddress[]> ResolveAndUpdateCacheAsync(string hostname, DateTime currentTime)
+        private async Task<IPAddress[]> ResolveAndUpdateCacheAsync(string hostname, long currentTime)
         {
             var addresses = await TryResolveInternal(hostname).ConfigureAwait(false);
             if (addresses != null)
-                cache[hostname] = (addresses, currentTime + cacheTtl);
+            {
+                cache[hostname] = (addresses, currentTime + cacheTtlTimestampTicks);
+            }
 
             return addresses ?? EmptyAddresses;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static long GetTimestamp()
+        {
+#if NET6_0_OR_GREATER
+            return Environment.TickCount64;
+#else
+            return Stopwatch.GetTimestamp();
+#endif
+        }
+
+        private static long ConvertToTimestampTicks(TimeSpan interval)
+        {
+#if NET6_0_OR_GREATER
+            return (long)interval.TotalMilliseconds;
+#else
+            return (long)(interval.TotalSeconds * Stopwatch.Frequency);
+#endif
         }
     }
 }
