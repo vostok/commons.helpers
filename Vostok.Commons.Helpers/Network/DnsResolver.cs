@@ -31,8 +31,8 @@ namespace Vostok.Commons.Helpers.Network
             cacheTtlTimestampTicks = ConvertToTimestampTicks(cacheTtl);
             this.resolveTimeout = resolveTimeout;
 
-            cache = new ConcurrentDictionary<string, (IPAddress[] addresses, long validTo)>(StringComparer.OrdinalIgnoreCase);
-            initialUpdateTasks = new ConcurrentDictionary<string, Lazy<Task<IPAddress[]>>>(StringComparer.OrdinalIgnoreCase);
+            cache = new ConcurrentDictionary<string, (IPAddress[] addresses, long validTo)>(StringComparer.Ordinal);
+            initialUpdateTasks = new ConcurrentDictionary<string, Lazy<Task<IPAddress[]>>>(StringComparer.Ordinal);
         }
 
         public IPAddress[] Resolve(string hostname, bool canWait)
